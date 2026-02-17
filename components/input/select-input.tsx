@@ -15,7 +15,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { Label } from "../ui/label";
 
 type Props = {
   fieldName: string;
@@ -48,7 +47,7 @@ export default function SelectInput({
             <FormControl>
               <SelectTrigger
                 className={cn(
-                  "flex justify-start min-w-24 [&>svg]:hidden",
+                  "flex justify-start w-full [&>svg]:hidden",
                   className,
                 )}
               >

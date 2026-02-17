@@ -8,7 +8,6 @@ import { cn } from "@/lib/utils";
 type TextInputProps = {
   fieldName: string;
   placeHolder?: string;
-  type: string;
   className?: string;
   disabled?: boolean;
 };
@@ -16,7 +15,6 @@ type TextInputProps = {
 function TextInput({
   fieldName,
   placeHolder,
-  type,
   className,
   disabled = false,
 }: TextInputProps) {
@@ -31,12 +29,7 @@ function TextInput({
         return (
           <FormItem>
             <FormControl className={cn("w-full", className)}>
-              <Input
-                placeholder={placeHolder}
-                type={type}
-                {...field}
-                disabled={disabled}
-              />
+              <Input placeholder={placeHolder} {...field} disabled={disabled} />
             </FormControl>
 
             <FormMessage />
