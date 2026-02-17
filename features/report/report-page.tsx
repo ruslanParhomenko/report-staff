@@ -5,6 +5,9 @@ import FormInput from "@/components/wrapper/form-wrapper";
 import { SubmitHandler, useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 import SelectInput from "@/components/input/select-input";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { PRODUCTS_FIRST } from "@/constants/product-data";
+import TextInput from "@/components/input/text-input";
 
 export default function ReportPage() {
   const form = useForm({
@@ -40,14 +43,31 @@ export default function ReportPage() {
 
   return (
     <FormInput form={form} onSubmit={onSubmit}>
-      <div className="w-72">
-        <SelectInput
-          fieldName="test"
-          fieldLabel="Test"
-          placeHolder="Select test"
-          data={["test", "test2", "test3"]}
-        />
-      </div>
+      <Table>
+        <TableBody>
+          <TableRow>
+            <TableCell>первое</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>
+              <SelectInput
+                fieldName="first"
+                placeHolder="...первое"
+                data={PRODUCTS_FIRST}
+              />
+            </TableCell>
+            {new Array(10).fill(0).map((_, i) => (
+              <TableCell key={i}>
+                <TextInput
+                  fieldName={`second-${i}`}
+                  placeHolder="..."
+                  type="number"
+                />
+              </TableCell>
+            ))}
+          </TableRow>
+        </TableBody>
+      </Table>
     </FormInput>
   );
 }

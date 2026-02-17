@@ -19,7 +19,6 @@ import { Label } from "../ui/label";
 
 type Props = {
   fieldName: string;
-  fieldLabel?: string;
   placeHolder?: string;
   data: string[];
   disabled?: boolean;
@@ -28,7 +27,6 @@ type Props = {
 
 export default function SelectInput({
   fieldName,
-  fieldLabel,
   placeHolder,
   data,
   disabled,
@@ -41,12 +39,7 @@ export default function SelectInput({
       control={control}
       name={fieldName}
       render={({ field, fieldState }) => (
-        <FormItem
-          className={cn(
-            fieldLabel && "grid gap-2 pb-2 grid-cols-1 justify-items-start",
-          )}
-        >
-          {fieldLabel && <Label>{fieldLabel}</Label>}
+        <FormItem>
           <Select
             value={field.value ?? ""}
             onValueChange={field.onChange}
@@ -55,9 +48,8 @@ export default function SelectInput({
             <FormControl>
               <SelectTrigger
                 className={cn(
-                  "flex justify-start min-w-12 [&>svg]:hidden",
+                  "flex justify-start min-w-24 [&>svg]:hidden",
                   className,
-                  field.value && "border-0 shadow-none font-bold",
                 )}
               >
                 <SelectValue placeholder={placeHolder} />
