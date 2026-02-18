@@ -35,6 +35,7 @@ export default function ReportRowItem({
   });
 
   useEffect(() => {
+    console.log(values);
     if (!values) return;
     const total = values.reduce((acc, v) => acc + Number(v.value || 0), 0);
     if (form.getValues(`${arrayName}.${index}.value`) !== String(total)) {
@@ -93,6 +94,7 @@ export default function ReportRowItem({
       <TableCell className="w-8">
         {index > 0 && (
           <button
+            type="button"
             onClick={() => remove(index)}
             className="cursor-pointer text-red-800"
           >
@@ -102,6 +104,7 @@ export default function ReportRowItem({
       </TableCell>
       <TableCell className="w-8">
         <button
+          type="button"
           onClick={() => append(defaultValueItem)}
           className="cursor-pointer text-blue-800"
         >

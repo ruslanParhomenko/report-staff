@@ -13,8 +13,7 @@ export default async function Page({
   if (!month || !year || !tab) return null;
   const uniqueKey = `${year}-${month}`;
 
-  const dataByMonth =
-    tab === "month" && (await getReportDataByUniqueKey(uniqueKey));
+  const dataByMonth = await getReportDataByUniqueKey(uniqueKey);
   return (
     <>
       <Activity mode={tab === "day" ? "visible" : "hidden"}>
