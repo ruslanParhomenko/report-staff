@@ -1,35 +1,36 @@
 "use client";
-
-import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import FormInput from "@/components/wrapper/form-wrapper";
 import {
+  Resolver,
   SubmitHandler,
   useFieldArray,
   useForm,
-  useWatch,
 } from "react-hook-form";
 import { toast } from "sonner";
-import SelectInput from "@/components/input/select-input";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import {
   PRODUCTS_FIRST,
   PRODUCTS_SECOND,
   PRODUCTS_SNACKS,
 } from "@/constants/product-data";
-import TextInput from "@/components/input/text-input";
 import { defaultValueReport, reportSchema, ReportType } from "./schema";
-import { useEffect } from "react";
 import ReportRow from "./report-row";
+import { useLocalStorageForm } from "@/hooks/use-local-storage";
+import { DatePickerInput } from "@/components/input/date-input";
+import { createReport } from "@/app/action/report/report-action";
 
-export default function ReportPage() {
+const KEY_STORAGE = "report-row-item";
+
+export default function ReportDayPage() {
   const form = useForm<ReportType>({
     defaultValues: defaultValueReport,
     resolver: zodResolver(reportSchema),
   });
 
-  const values = useWatch({ control: form.control });
+  const { isLoaded } = useLocalStorageForm(form, KEY_STORAGE);
+
   const first = useFieldArray({
     control: form.control,
     name: "first",
@@ -40,43 +41,60 @@ export default function ReportPage() {
     name: "second",
   });
 
-  const snacks = useFieldArray({
-    control: form.control,
-    name: "snacks",
-  });
-
   const deserts = useFieldArray({
     control: form.control,
     name: "deserts",
   });
 
-  const onSubmit: SubmitHandler<any> = (data) => {
+  const onSubmit: SubmitHandler<ReportType> = async (data) => {
+    const { date, ...rest } = data;
+    const dateObj = new Date(date);
+    const day = String(dateObj.getDate()).padStart(2, "0");
+    const month = String(dateObj.getMonth() + 1).padStart(2, "0");
+    const year = dateObj.getFullYear();
+    const uniqueKey = `${year}-${month}`;
+    console.log(uniqueKey, day);
+
     console.log("Manual submit:", data);
+
+    await createReport({
+      day,
+      uniqueKey,
+      data: rest,
+    });
     toast.success("Form submitted!");
+    form.reset(defaultValueReport);
   };
+
+  if (!isLoaded) return null;
 
   return (
     <FormInput form={form} onSubmit={onSubmit}>
+      <DatePickerInput fieldName="date" />
       <Table>
         <TableBody>
+          <TableRow className="h-12 text-muted-foreground">
+            <TableCell colSpan={4}>первое</TableCell>
+          </TableRow>
           <ReportRow
             data={first}
             arrayName="first"
             selectData={PRODUCTS_FIRST}
             form={form}
           />
+          <TableRow className="h-12 text-muted-foreground">
+            <TableCell colSpan={4}>второе и гарнир</TableCell>
+          </TableRow>
           <ReportRow
             data={second}
             arrayName="second"
             selectData={PRODUCTS_SECOND}
             form={form}
           />
-          <ReportRow
-            data={snacks}
-            arrayName="snacks"
-            selectData={PRODUCTS_SNACKS}
-            form={form}
-          />
+
+          <TableRow className="h-12 text-muted-foreground">
+            <TableCell colSpan={4}>сэндвичи и десерты</TableCell>
+          </TableRow>
           <ReportRow
             data={deserts}
             arrayName="deserts"

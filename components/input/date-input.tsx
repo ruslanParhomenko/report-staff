@@ -19,11 +19,9 @@ import {
   FormItem,
   FormControl,
   FormMessage,
-  FormLabel,
 } from "@/components/ui/form";
 import { useFormContext } from "react-hook-form";
 
-// Формат для отображения: February 19, 2026
 function formatDisplay(dateStr: string | undefined) {
   if (!dateStr) return "";
   const date = new Date(dateStr);
@@ -34,22 +32,15 @@ function formatDisplay(dateStr: string | undefined) {
   });
 }
 
-// Формат для хранения в форме: YYYY-MM-DD
 function formatValueLocal(date: Date | undefined) {
   if (!date) return "";
   const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0"); // месяцы 0-11
+  const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`; // YYYY-MM-DD
+  return `${year}-${month}-${day}`;
 }
 
-export function DatePickerInput({
-  fieldName = "date",
-  fieldLabel = "Select Date",
-}: {
-  fieldName?: string;
-  fieldLabel?: string;
-}) {
+export function DatePickerInput({ fieldName }: { fieldName: string }) {
   const { control } = useFormContext();
 
   return (
@@ -61,12 +52,10 @@ export function DatePickerInput({
 
         return (
           <FormItem className="w-48 mx-auto">
-            {fieldLabel && <FormLabel>{fieldLabel}</FormLabel>}
-
             <FormControl>
               <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
-                  <InputGroup>
+                  <InputGroup className="border-0 text-blue-800 shadow-none">
                     <InputGroupInput
                       value={formatDisplay(field.value)}
                       placeholder="June 01, 2025"
@@ -78,8 +67,7 @@ export function DatePickerInput({
                         size="icon-xs"
                         aria-label="Select date"
                       >
-                        <CalendarIcon />
-                        <span className="sr-only">Select date</span>
+                        <CalendarIcon className="text-blue-800 cursor-pointer" />
                       </InputGroupButton>
                     </InputGroupAddon>
                   </InputGroup>
@@ -95,7 +83,7 @@ export function DatePickerInput({
                     mode="single"
                     selected={field.value ? new Date(field.value) : undefined}
                     onSelect={(date) => {
-                      field.onChange(formatValueLocal(date)); // теперь правильная локальная дата
+                      field.onChange(formatValueLocal(date));
                       setOpen(false);
                     }}
                   />

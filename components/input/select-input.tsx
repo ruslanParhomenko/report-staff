@@ -49,6 +49,7 @@ export default function SelectInput({
                 className={cn(
                   "flex justify-start w-full [&>svg]:hidden",
                   className,
+                  field.value && "border-0 shadow-none font-bold",
                 )}
               >
                 <SelectValue placeholder={placeHolder} />

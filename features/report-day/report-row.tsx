@@ -24,6 +24,8 @@ export default function ReportRow({
           arrayName={arrayName}
           form={form}
           selectData={selectData}
+          append={data.append}
+          remove={data.remove}
         />
       ))}
     </>
