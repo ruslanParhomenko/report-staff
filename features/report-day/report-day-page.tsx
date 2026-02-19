@@ -2,12 +2,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import FormInput from "@/components/wrapper/form-wrapper";
-import {
-  Resolver,
-  SubmitHandler,
-  useFieldArray,
-  useForm,
-} from "react-hook-form";
+import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import {
@@ -20,6 +15,7 @@ import ReportRow from "./report-row";
 import { useLocalStorageForm } from "@/hooks/use-local-storage";
 import { DatePickerInput } from "@/components/input/date-input";
 import { createReport } from "@/app/action/report/report-action";
+import { MONTHS } from "@/utils/get-month-days";
 
 const KEY_STORAGE = "report-row-item";
 
@@ -48,21 +44,20 @@ export default function ReportDayPage() {
 
   const onSubmit: SubmitHandler<ReportType> = async (data) => {
     const { date, ...rest } = data;
-    const dateObj = new Date(date);
-    const day = String(dateObj.getDate()).padStart(2, "0");
-    const month = String(dateObj.getMonth() + 1).padStart(2, "0");
-    const year = dateObj.getFullYear();
+    const dateValue = new Date(date);
+    const month = MONTHS[dateValue.getMonth()];
+    const year = dateValue.getFullYear().toString();
+    const day = dateValue.getUTCDate().toString();
     const uniqueKey = `${year}-${month}`;
-    console.log(uniqueKey, day);
 
-    console.log("Manual submit:", data);
+    console.log(rest);
 
     await createReport({
-      day,
-      uniqueKey,
+      day: day,
+      uniqueKey: uniqueKey,
       data: rest,
     });
-    toast.success("Form submitted!");
+    toast.success("отчет сохранен");
     form.reset(defaultValueReport);
   };
 

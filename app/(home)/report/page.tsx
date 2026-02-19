@@ -20,7 +20,7 @@ export default async function Page({
         <ReportDayPage />
       </Activity>
       <Activity mode={tab === "month" ? "visible" : "hidden"}>
-        <ReportMonthPage data={dataByMonth} />
+        <ReportMonthPage data={dataByMonth} month={month} year={year} />
       </Activity>
     </>
   );

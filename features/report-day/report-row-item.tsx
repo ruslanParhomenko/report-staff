@@ -9,7 +9,7 @@ import SelectInput from "@/components/input/select-input";
 import TextInput from "@/components/input/text-input";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { defaultValueItem, ReportType } from "./schema";
-import { MinusIcon, Plus, PlusIcon } from "lucide-react";
+import { MinusIcon, PlusIcon } from "lucide-react";
 import { formatNow } from "@/utils/format-date";
 
 type ReportRowItemProps = {
@@ -35,7 +35,6 @@ export default function ReportRowItem({
   });
 
   useEffect(() => {
-    console.log(values);
     if (!values) return;
     const total = values.reduce((acc, v) => acc + Number(v.value || 0), 0);
     if (form.getValues(`${arrayName}.${index}.value`) !== String(total)) {

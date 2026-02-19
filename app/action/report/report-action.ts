@@ -14,6 +14,8 @@ type ReportCreateType = {
 // create report
 export const createReport = async (data: ReportCreateType) => {
   const { uniqueKey, day, ...restData } = data;
+
+  console.log(restData);
   const docRef = dbAdmin.collection(REPORT_STAFF_ACTION_TAG).doc(uniqueKey);
   const snap = await docRef.get();
 
@@ -22,7 +24,7 @@ export const createReport = async (data: ReportCreateType) => {
       data: [
         {
           day: day,
-          data: restData,
+          ...restData,
         },
       ],
     };
