@@ -8,6 +8,8 @@ import { cn } from "@/lib/utils";
 import { NAV_BY_PATCH } from "./constants";
 import { MONTHS } from "@/utils/get-month-days";
 import SelectByMonthYear from "./select-month-year";
+import { LogOut } from "lucide-react";
+import { signOut } from "next-auth/react";
 
 export default function NavTabs() {
   const pathname = usePathname();
@@ -149,6 +151,9 @@ export default function NavTabs() {
               classNameMonthYear={navItems.length > 0 ? "md:w-22 w-10" : "w-24"}
             />
           )}
+          <button onClick={() => signOut({ callbackUrl: "/" })}>
+            <LogOut className="w-4 h-4" />
+          </button>
         </div>
       </div>
     </Tabs>

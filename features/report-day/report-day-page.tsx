@@ -47,10 +47,10 @@ export default function ReportDayPage() {
     const dateValue = new Date(date);
     const month = MONTHS[dateValue.getMonth()];
     const year = dateValue.getFullYear().toString();
-    const day = dateValue.getUTCDate().toString();
+    const day = dateValue.getDate().toString();
     const uniqueKey = `${year}-${month}`;
 
-    console.log(rest);
+    console.log(rest, uniqueKey, day);
 
     await createReport({
       day: day,

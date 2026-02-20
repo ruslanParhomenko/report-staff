@@ -1,12 +1,4 @@
-type ProductItem = {
-  name: string;
-  value?: string;
-};
-
-type DayItem = {
-  day: string;
-  data: Record<string, ProductItem[] | undefined>;
-};
+import { GetReportType } from "@/app/action/report/report-action";
 
 type MatrixMap = Record<string, { day: string; value: string }[]>;
 
@@ -16,8 +8,8 @@ type BuildResult = {
   days: string[];
 };
 
-export function buildProductMatrix(daysData: DayItem[]): BuildResult {
-  if (!Array.isArray(daysData)) {
+export function buildProductMatrix(report: GetReportType | null): BuildResult {
+  if (!report || !Array.isArray(report.data)) {
     return {
       uniqueNames: [],
       map: {},
@@ -25,9 +17,11 @@ export function buildProductMatrix(daysData: DayItem[]): BuildResult {
     };
   }
 
+  const daysData = report.data;
+
   const uniqueNames = new Set<string>();
   const map: MatrixMap = {};
-  const days = daysData?.map((d) => d.day);
+  const days = daysData.map((d) => d.day);
 
   // 1️⃣ Собираем уникальные name
   for (const dayItem of daysData) {
@@ -43,7 +37,7 @@ export function buildProductMatrix(daysData: DayItem[]): BuildResult {
     }
   }
 
-  // 2️⃣ Инициализируем map со всеми днями (учёт пустых)
+  // 2️⃣ Инициализируем map
   for (const name of uniqueNames) {
     map[name] = days.map((day) => ({
       day,

@@ -11,28 +11,51 @@ type ReportCreateType = {
   data: Omit<ReportType, "date">;
 };
 
-// create report
-export const createReport = async (data: ReportCreateType) => {
-  const { uniqueKey, day, ...restData } = data;
+export type DataType = {
+  day: string;
+  data: Omit<ReportType, "date">;
+};
 
-  console.log(restData);
+export type GetReportType = {
+  id: string;
+  data: DataType[];
+};
+// create report
+export const createReport = async (payload: ReportCreateType) => {
+  const { uniqueKey, day, data } = payload;
+
   const docRef = dbAdmin.collection(REPORT_STAFF_ACTION_TAG).doc(uniqueKey);
+
   const snap = await docRef.get();
 
   if (!snap.exists) {
-    const doc = {
+    await docRef.set({
       data: [
         {
-          day: day,
-          ...restData,
+          day,
+          data,
         },
       ],
-    };
+    });
 
-    await docRef.set(doc);
     updateTag(REPORT_STAFF_ACTION_TAG);
     return;
   }
+
+  const raw = snap.data();
+  if (!raw || !Array.isArray(raw.data)) return;
+
+  const newData = [
+    ...raw.data,
+    {
+      day,
+      data, // ✅ без лишней вложенности
+    },
+  ];
+
+  await docRef.update({ data: newData });
+
+  updateTag(REPORT_STAFF_ACTION_TAG);
 };
 
 // get by uniqueKey
@@ -44,9 +67,13 @@ export async function _getReportDataByUniqueKey(uniqueKey: string) {
 
   if (!doc.exists) return null;
 
+  const raw = doc.data();
+
+  if (!raw || !Array.isArray(raw.data)) return null;
+
   return {
     id: doc.id,
-    ...doc.data(),
+    data: raw.data,
   };
 }
 
