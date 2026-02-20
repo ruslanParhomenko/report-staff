@@ -83,7 +83,7 @@ export default function ReportDayPage() {
 
   return (
     <FormInput form={form} onSubmit={onSubmit}>
-      <DatePickerInput fieldName="date" />
+      <DatePickerInput fieldName="date" disabled />
       <Table>
         <TableBody>
           <TableRow className="h-12 text-muted-foreground">

@@ -40,7 +40,13 @@ function formatValueLocal(date: Date | undefined) {
   return `${year}-${month}-${day}`;
 }
 
-export function DatePickerInput({ fieldName }: { fieldName: string }) {
+export function DatePickerInput({
+  fieldName,
+  disabled,
+}: {
+  fieldName: string;
+  disabled?: boolean;
+}) {
   const { control } = useFormContext();
 
   return (
@@ -86,6 +92,7 @@ export function DatePickerInput({ fieldName }: { fieldName: string }) {
                       field.onChange(formatValueLocal(date));
                       setOpen(false);
                     }}
+                    disabled={disabled}
                   />
                 </PopoverContent>
               </Popover>
