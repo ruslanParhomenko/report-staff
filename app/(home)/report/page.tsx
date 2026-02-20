@@ -15,8 +15,6 @@ export default async function Page({
   searchParams: Promise<{ [key: string]: string | undefined }>;
 }) {
   const session = await getServerSession(authOptions);
-
-  console.log(session);
   if (!session) {
     redirect("/");
   }
@@ -27,7 +25,8 @@ export default async function Page({
   if (!month || !year || !tab) return null;
   const uniqueKey = `${year}-${month}`;
 
-  const dataByMonth = await getReportDataByUniqueKey(uniqueKey);
+  const dataByMonth =
+    tab === "month" ? await getReportDataByUniqueKey(uniqueKey) : null;
   return (
     <>
       <Activity mode={tab === "day" ? "visible" : "hidden"}>

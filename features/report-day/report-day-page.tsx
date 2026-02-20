@@ -2,9 +2,20 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import FormInput from "@/components/wrapper/form-wrapper";
-import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
+import {
+  SubmitHandler,
+  useFieldArray,
+  useForm,
+  useWatch,
+} from "react-hook-form";
 import { toast } from "sonner";
-import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableFooter,
+  TableRow,
+} from "@/components/ui/table";
 import {
   PRODUCTS_FIRST,
   PRODUCTS_SECOND,
@@ -16,6 +27,7 @@ import { useLocalStorageForm } from "@/hooks/use-local-storage";
 import { DatePickerInput } from "@/components/input/date-input";
 import { createReport } from "@/app/action/report/report-action";
 import { MONTHS } from "@/utils/get-month-days";
+import { useOperationalDayCheck } from "@/hooks/use-in-day";
 
 const KEY_STORAGE = "report-row-item";
 
@@ -42,6 +54,13 @@ export default function ReportDayPage() {
     name: "deserts",
   });
 
+  const date = useWatch({
+    control: form.control,
+    name: "date",
+  });
+
+  const isOperational = useOperationalDayCheck(date);
+
   const onSubmit: SubmitHandler<ReportType> = async (data) => {
     const { date, ...rest } = data;
     const dateValue = new Date(date);
@@ -50,14 +69,13 @@ export default function ReportDayPage() {
     const day = dateValue.getDate().toString();
     const uniqueKey = `${year}-${month}`;
 
-    console.log(rest, uniqueKey, day);
-
     await createReport({
       day: day,
       uniqueKey: uniqueKey,
       data: rest,
     });
     toast.success("отчет сохранен");
+
     form.reset(defaultValueReport);
   };
 
@@ -76,6 +94,7 @@ export default function ReportDayPage() {
             arrayName="first"
             selectData={PRODUCTS_FIRST}
             form={form}
+            disabled={!isOperational}
           />
           <TableRow className="h-12 text-muted-foreground">
             <TableCell colSpan={4}>второе и гарнир</TableCell>
@@ -85,6 +104,7 @@ export default function ReportDayPage() {
             arrayName="second"
             selectData={PRODUCTS_SECOND}
             form={form}
+            disabled={!isOperational}
           />
 
           <TableRow className="h-12 text-muted-foreground">
@@ -95,8 +115,16 @@ export default function ReportDayPage() {
             arrayName="deserts"
             selectData={PRODUCTS_SNACKS}
             form={form}
+            disabled={!isOperational}
           />
         </TableBody>
+        <TableFooter>
+          <TableRow>
+            <TableCell colSpan={8} className="h-12 text-red-800 text-center">
+              {!isOperational && "Выход за рабочий день смените дату"}
+            </TableCell>
+          </TableRow>
+        </TableFooter>
       </Table>
     </FormInput>
   );

@@ -5,7 +5,6 @@ type MatrixMap = Record<string, { day: string; value: string }[]>;
 type BuildResult = {
   uniqueNames: string[];
   map: MatrixMap;
-  days: string[];
 };
 
 export function buildProductMatrix(report: GetReportType | null): BuildResult {
@@ -13,7 +12,6 @@ export function buildProductMatrix(report: GetReportType | null): BuildResult {
     return {
       uniqueNames: [],
       map: {},
-      days: [],
     };
   }
 
@@ -23,7 +21,6 @@ export function buildProductMatrix(report: GetReportType | null): BuildResult {
   const map: MatrixMap = {};
   const days = daysData.map((d) => d.day);
 
-  // 1️⃣ Собираем уникальные name
   for (const dayItem of daysData) {
     const categories = Object.values(dayItem.data ?? {});
 
@@ -37,7 +34,6 @@ export function buildProductMatrix(report: GetReportType | null): BuildResult {
     }
   }
 
-  // 2️⃣ Инициализируем map
   for (const name of uniqueNames) {
     map[name] = days.map((day) => ({
       day,
@@ -45,7 +41,6 @@ export function buildProductMatrix(report: GetReportType | null): BuildResult {
     }));
   }
 
-  // 3️⃣ Заполняем значениями
   for (const dayItem of daysData) {
     const { day, data } = dayItem;
 
@@ -71,6 +66,5 @@ export function buildProductMatrix(report: GetReportType | null): BuildResult {
   return {
     uniqueNames: Array.from(uniqueNames),
     map,
-    days,
   };
 }

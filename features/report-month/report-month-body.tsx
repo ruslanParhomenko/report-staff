@@ -23,13 +23,9 @@ export default function ReportMonthBody({
 
         return (
           <TableRow key={name} className="h-10">
-            {/* Название продукта */}
             <TableCell className="px-2 font-medium text-sm">{name}</TableCell>
-
-            {/* Пустая ячейка (в header у тебя colSpan={2}) */}
             <TableCell />
 
-            {/* Значения по дням */}
             {monthDays.map((dayObj) => {
               const found = valuesByDay.find(
                 (v) => Number(v.day) === dayObj.day,

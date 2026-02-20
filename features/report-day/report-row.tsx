@@ -7,6 +7,7 @@ type ReportRowProps = {
   form: UseFormReturn<ReportType>;
   arrayName: keyof Omit<ReportType, "date">;
   selectData: string[];
+  disabled?: boolean;
 };
 
 export default function ReportRow({
@@ -14,6 +15,7 @@ export default function ReportRow({
   form,
   arrayName,
   selectData,
+  disabled,
 }: ReportRowProps) {
   return (
     <>
@@ -26,6 +28,7 @@ export default function ReportRow({
           selectData={selectData}
           append={data.append}
           remove={data.remove}
+          disabled={disabled}
         />
       ))}
     </>

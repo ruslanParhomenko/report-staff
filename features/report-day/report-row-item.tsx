@@ -19,6 +19,7 @@ type ReportRowItemProps = {
   arrayName: keyof Omit<ReportType, "date">;
   form: UseFormReturn<ReportType>;
   selectData: string[];
+  disabled?: boolean;
 };
 
 export default function ReportRowItem({
@@ -28,6 +29,7 @@ export default function ReportRowItem({
   arrayName,
   form,
   selectData,
+  disabled,
 }: ReportRowItemProps) {
   const values = useWatch({
     name: `${arrayName}.${index}.valueByTime`,
@@ -64,6 +66,7 @@ export default function ReportRowItem({
           fieldName={`${arrayName}.${index}.name`}
           placeHolder="Выберите продукт"
           data={selectData}
+          disabled={disabled}
         />
       </TableCell>
 
@@ -81,6 +84,7 @@ export default function ReportRowItem({
               fieldName={`${arrayName}.${index}.valueByTime.${i}.value`}
               placeHolder="..."
               className="w-12"
+              disabled={disabled}
             />
             <TextInput
               fieldName={`${arrayName}.${index}.valueByTime.${i}.time`}
@@ -96,6 +100,7 @@ export default function ReportRowItem({
             type="button"
             onClick={() => remove(index)}
             className="cursor-pointer text-red-800"
+            disabled={disabled}
           >
             <MinusIcon className="h-4 w-4" />
           </button>
@@ -106,6 +111,7 @@ export default function ReportRowItem({
           type="button"
           onClick={() => append(defaultValueItem)}
           className="cursor-pointer text-blue-800"
+          disabled={disabled}
         >
           <PlusIcon className="h-4 w-4" />
         </button>

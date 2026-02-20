@@ -7,7 +7,6 @@ export function useLocalStorageForm<T extends FieldValues>(
 ) {
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // set data from localStorage
   useEffect(() => {
     const savedData = localStorage.getItem(key);
     if (savedData) {
@@ -21,7 +20,6 @@ export function useLocalStorageForm<T extends FieldValues>(
     setIsLoaded(true);
   }, [form, key]);
 
-  // save data to localStorage
   const watchAllFields = form.watch();
 
   useEffect(() => {
@@ -30,15 +28,5 @@ export function useLocalStorageForm<T extends FieldValues>(
     }
   }, [watchAllFields, isLoaded, key]);
 
-  const resetForm = (defaultValues: T) => {
-    form.reset(defaultValues);
-    if (isLoaded) {
-      localStorage.removeItem(key);
-    }
-  };
-  const removeLocalStorageKey = () => {
-    localStorage.removeItem(key);
-  };
-
-  return { isLoaded, resetForm, removeLocalStorageKey };
+  return { isLoaded };
 }
