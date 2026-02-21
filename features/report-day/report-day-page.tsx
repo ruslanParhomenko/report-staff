@@ -119,8 +119,8 @@ export default function ReportDayPage() {
           />
         </TableBody>
         <TableFooter>
-          <TableRow>
-            <TableCell colSpan={8} className="h-12 text-red-800 text-center">
+          <TableRow className="h-20 bg-background">
+            <TableCell colSpan={13} className="h-12 text-red-800 text-center">
               {!isOperational && "Выход за рабочий день смените дату"}
             </TableCell>
           </TableRow>

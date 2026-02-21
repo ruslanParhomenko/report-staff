@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const valueTimeSchema = z.object({
   time: z.string(),
-  value: z.string(),
+  value: z.string().regex(/^\d*$/, "ввод -  только цифры"),
 });
 
 export const defaultValueTime = Array.from({ length: 8 }, () => ({
