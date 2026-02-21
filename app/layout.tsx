@@ -4,6 +4,7 @@ import "./globals.css";
 import { SessionProviders } from "@/providers/session-providers";
 import NavTabs from "@/components/nav/nav-tabs";
 import { Toaster } from "sonner";
+import { Suspense } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,7 +35,9 @@ export default async function RootLayout({
           <Toaster position="top-center" />
 
           <div className="flex flex-col h-screen w-screen overflow-y-auto px-4">
-            <NavTabs />
+            <Suspense fallback={null}>
+              <NavTabs />
+            </Suspense>
             {children}
           </div>
         </SessionProviders>

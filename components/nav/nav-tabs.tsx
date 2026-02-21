@@ -13,7 +13,7 @@ import { signOut } from "next-auth/react";
 
 export default function NavTabs() {
   const pathname = usePathname();
-  const mainRoute = pathname.split("/")[1];
+
   const searchParams = useSearchParams();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
