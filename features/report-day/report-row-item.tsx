@@ -1,34 +1,21 @@
 import { useEffect } from "react";
-import {
-  useWatch,
-  UseFormReturn,
-  UseFieldArrayAppend,
-  UseFieldArrayRemove,
-} from "react-hook-form";
-import SelectInput from "@/components/input/select-input";
+import { useWatch, UseFormReturn } from "react-hook-form";
 import TextInput from "@/components/input/text-input";
 import { TableCell, TableRow } from "@/components/ui/table";
-import { defaultValueItem, ReportType } from "./schema";
-import { MinusIcon, PlusIcon } from "lucide-react";
+import { ReportType } from "./schema";
 import { formatNow } from "@/utils/format-date";
 
 type ReportRowItemProps = {
-  append: UseFieldArrayAppend<ReportType, keyof Omit<ReportType, "date">>;
-  remove: UseFieldArrayRemove;
   index: number;
   arrayName: keyof Omit<ReportType, "date">;
   form: UseFormReturn<ReportType>;
-  selectData: string[];
   disabled?: boolean;
 };
 
 export default function ReportRowItem({
-  append,
-  remove,
   index,
   arrayName,
   form,
-  selectData,
   disabled,
 }: ReportRowItemProps) {
   const values = useWatch({
@@ -43,8 +30,8 @@ export default function ReportRowItem({
       form.setValue(`${arrayName}.${index}.value`, String(total));
     }
 
-    values?.forEach((item, idx) => {
-      if (item?.value && !item?.time) {
+    values?.forEach((value, idx) => {
+      if (value?.value && !value?.time) {
         form.setValue(
           `${arrayName}.${index}.valueByTime.${idx}.time`,
           formatNow(),
@@ -56,66 +43,53 @@ export default function ReportRowItem({
     });
   }, [values, form, arrayName, index]);
 
-  const item = form.getValues(`${arrayName}.${index}`);
+  const items = form.getValues(`${arrayName}.${index}`);
 
   return (
-    <TableRow>
-      <TableCell className="w-6"> {index + 1}</TableCell>
-      <TableCell className="w-20">
-        <SelectInput
+    <TableRow className="p-0">
+      <TableCell className="w-6 p-0"> {index + 1}</TableCell>
+      <TableCell className="w-20 p-0">
+        <TextInput
           fieldName={`${arrayName}.${index}.name`}
-          placeHolder="Выберите продукт"
-          data={selectData}
+          className="w-50 border-0 shadow-none font-bold"
           disabled={disabled}
         />
       </TableCell>
 
-      <TableCell className="w-30">
+      <TableCell className="w-30 p-0">
         <TextInput
           fieldName={`${arrayName}.${index}.value`}
           className="w-12 border-0 shadow-none font-bold"
         />
       </TableCell>
 
-      {item?.valueByTime?.map((v, i) => (
-        <TableCell key={i} className="w-30">
-          <div className="flex gap-3">
+      {items?.valueByTime?.map((v, i) => (
+        <TableCell key={i} className="w-30 p-0">
+          <div className="flex gap-3 items-center">
             <TextInput
               fieldName={`${arrayName}.${index}.valueByTime.${i}.value`}
               placeHolder="..."
-              className="w-12"
+              className="w-12 h-6"
               disabled={disabled}
             />
             <TextInput
               fieldName={`${arrayName}.${index}.valueByTime.${i}.time`}
               placeHolder="..."
-              className=" text-xs! text-red-800 p-0 border-0 shadow-none"
+              className="
+    text-xs text-red-800 p-0 h-6
+    border-0 shadow-none
+    outline-none
+    focus:outline-none
+    focus:ring-0
+    focus:border-0
+    focus-visible:ring-0
+    focus-visible:outline-none
+  "
+              disabled
             />
           </div>
         </TableCell>
       ))}
-      <TableCell className="w-8">
-        {index > 0 && (
-          <button
-            type="button"
-            onClick={() => remove(index)}
-            className="cursor-pointer text-red-800"
-            disabled={disabled}
-          >
-            <MinusIcon className="h-4 w-4" />
-          </button>
-        )}
-      </TableCell>
-      <TableCell className="w-8">
-        <button
-          type="button"
-          onClick={() => append(defaultValueItem)}
-          className="cursor-pointer text-blue-800"
-          disabled={disabled}
-        >
-          <PlusIcon className="h-4 w-4" />
-        </button>
-      </TableCell>
     </TableRow>
   );
 }

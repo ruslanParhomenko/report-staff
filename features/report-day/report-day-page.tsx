@@ -21,13 +21,19 @@ import {
   PRODUCTS_SECOND,
   PRODUCTS_SNACKS,
 } from "@/constants/product-data";
-import { defaultValueReport, reportSchema, ReportType } from "./schema";
+import {
+  defaultValueReport,
+  defaultValueTime,
+  reportSchema,
+  ReportType,
+} from "./schema";
 import ReportRow from "./report-row";
 import { useLocalStorageForm } from "@/hooks/use-local-storage";
 import { DatePickerInput } from "@/components/input/date-input";
 import { createReport } from "@/app/action/report/report-action";
 import { MONTHS } from "@/utils/get-month-days";
 import { useOperationalDayCheck } from "@/hooks/use-in-day";
+import { use, useEffect } from "react";
 
 const KEY_STORAGE = "report-row-item";
 
@@ -39,24 +45,24 @@ export default function ReportDayPage() {
 
   const { isLoaded } = useLocalStorageForm(form, KEY_STORAGE);
 
-  const first = useFieldArray({
+  const date = useWatch({
+    control: form.control,
+    name: "date",
+  });
+
+  const firstArray = useFieldArray({
     control: form.control,
     name: "first",
   });
 
-  const second = useFieldArray({
+  const secondArray = useFieldArray({
     control: form.control,
     name: "second",
   });
 
-  const deserts = useFieldArray({
+  const desertsArray = useFieldArray({
     control: form.control,
     name: "deserts",
-  });
-
-  const date = useWatch({
-    control: form.control,
-    name: "date",
   });
 
   const isOperational = useOperationalDayCheck(date);
@@ -79,52 +85,81 @@ export default function ReportDayPage() {
     form.reset(defaultValueReport);
   };
 
+  useEffect(() => {
+    if (!isLoaded) return;
+
+    firstArray.replace(
+      PRODUCTS_FIRST.map((name) => ({
+        name,
+        value: "",
+        valueByTime: defaultValueTime,
+      })),
+    );
+
+    secondArray.replace(
+      PRODUCTS_SECOND.map((name) => ({
+        name,
+        value: "",
+        valueByTime: defaultValueTime,
+      })),
+    );
+
+    desertsArray.replace(
+      PRODUCTS_SNACKS.map((name) => ({
+        name,
+        value: "",
+        valueByTime: defaultValueTime,
+      })),
+    );
+  }, [isLoaded]);
+
   if (!isLoaded) return null;
 
   return (
     <FormInput form={form} onSubmit={onSubmit}>
-      <DatePickerInput fieldName="date" disabled />
+      <DatePickerInput fieldName="date" />
       <Table>
         <TableBody>
-          <TableRow className="h-12 text-muted-foreground">
-            <TableCell colSpan={4}>первое</TableCell>
-          </TableRow>
-          <ReportRow
-            data={first}
-            arrayName="first"
-            selectData={PRODUCTS_FIRST}
-            form={form}
-            disabled={!isOperational}
-          />
-          <TableRow className="h-12 text-muted-foreground">
-            <TableCell colSpan={4}>второе и гарнир</TableCell>
-          </TableRow>
-          <ReportRow
-            data={second}
-            arrayName="second"
-            selectData={PRODUCTS_SECOND}
-            form={form}
-            disabled={!isOperational}
-          />
-
-          <TableRow className="h-12 text-muted-foreground">
-            <TableCell colSpan={4}>сэндвичи и десерты</TableCell>
-          </TableRow>
-          <ReportRow
-            data={deserts}
-            arrayName="deserts"
-            selectData={PRODUCTS_SNACKS}
-            form={form}
-            disabled={!isOperational}
-          />
-        </TableBody>
-        <TableFooter>
-          <TableRow className="h-20 bg-background">
+          <TableRow className=" bg-background">
             <TableCell colSpan={13} className="h-12 text-red-800 text-center">
               {!isOperational && "Выход за рабочий день смените дату"}
             </TableCell>
           </TableRow>
-        </TableFooter>
+          <TableRow className="h-10 text-muted-foreground">
+            <TableCell colSpan={4} className="text-red-800 font-bold">
+              первое
+            </TableCell>
+          </TableRow>
+          <ReportRow
+            data={PRODUCTS_FIRST}
+            arrayName="first"
+            form={form}
+            disabled={!isOperational}
+          />
+          <TableRow className="h-10 text-muted-foreground">
+            <TableCell colSpan={4} className="text-red-800 font-bold">
+              второе и гарнир
+            </TableCell>
+          </TableRow>
+          <ReportRow
+            data={PRODUCTS_SECOND}
+            arrayName="second"
+            form={form}
+            disabled={!isOperational}
+          />
+
+          <TableRow className="h-10 text-muted-foreground">
+            <TableCell colSpan={4} className="text-red-800 font-bold">
+              сэндвичи и десерты
+            </TableCell>
+          </TableRow>
+          <ReportRow
+            data={PRODUCTS_SNACKS}
+            arrayName="deserts"
+            form={form}
+            disabled={!isOperational}
+          />
+        </TableBody>
       </Table>
     </FormInput>
   );

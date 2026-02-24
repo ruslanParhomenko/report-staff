@@ -27,7 +27,6 @@ export const reportSchema = z.object({
   date: z.string(),
   first: z.array(reportItemSchema),
   second: z.array(reportItemSchema),
-  snacks: z.array(reportItemSchema),
   deserts: z.array(reportItemSchema),
 });
 
@@ -37,6 +36,5 @@ export const defaultValueReport = {
   date: new Date().toISOString().split("T")[0],
   first: [defaultValueItem],
   second: [defaultValueItem],
-  snacks: [defaultValueItem],
   deserts: [defaultValueItem],
 };
