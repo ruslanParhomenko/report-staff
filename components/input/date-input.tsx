@@ -61,7 +61,7 @@ export function DatePickerInput({
             <FormControl>
               <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
-                  <InputGroup className="border-0 text-blue-800 shadow-none">
+                  <InputGroup className="border-0 text-blue-800 shadow-none h-6">
                     <InputGroupInput
                       value={formatDisplay(field.value)}
                       placeholder="June 01, 2025"

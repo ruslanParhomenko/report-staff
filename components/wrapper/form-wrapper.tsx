@@ -30,12 +30,12 @@ export default function FormInput<T extends FieldValues>({
   return (
     <Form {...form}>
       <form
-        className={cn("flex flex-col h-[94vh]", className)}
+        className={cn("flex flex-col h-[96vh]", className)}
         onSubmit={form.handleSubmit(handleFormSubmit)}
       >
         {children}
-        <div className="sticky bottom-0 w-full flex justify-start gap-6 px-4 py-2 mt-auto bg-background z-30">
-          <Button type="submit" className=" mt-auto h-8 w-24">
+        <div className="sticky bottom-0 w-full flex justify-start gap-6 px-4 py-1 mt-auto bg-background z-30">
+          <Button type="submit" className=" mt-auto h-7 w-24">
             save
           </Button>
         </div>

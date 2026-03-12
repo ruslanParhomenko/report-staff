@@ -46,12 +46,12 @@ export default function ReportRowItem({
   const items = form.getValues(`${arrayName}.${index}`);
 
   return (
-    <TableRow className="p-0">
-      <TableCell className="w-6 p-0"> {index + 1}</TableCell>
-      <TableCell className="w-20 p-0">
+    <TableRow>
+      <TableCell className="w-6"> {index + 1}</TableCell>
+      <TableCell className="w-20">
         <TextInput
           fieldName={`${arrayName}.${index}.name`}
-          className="w-50 border-0 shadow-none font-bold"
+          className="w-50 border-0 shadow-none font-bold h-6"
           disabled={disabled}
         />
       </TableCell>
@@ -59,7 +59,7 @@ export default function ReportRowItem({
       <TableCell className="w-30 p-0">
         <TextInput
           fieldName={`${arrayName}.${index}.value`}
-          className="w-12 border-0 shadow-none font-bold"
+          className="w-12 border-0 shadow-none font-bold h-6"
         />
       </TableCell>
 
@@ -69,12 +69,11 @@ export default function ReportRowItem({
             <TextInput
               fieldName={`${arrayName}.${index}.valueByTime.${i}.value`}
               placeHolder="..."
-              className="w-12 h-6"
+              className="w-12 h-6 border-0 border-x rounded-none shadow-none bg-transparent "
               disabled={disabled}
             />
             <TextInput
               fieldName={`${arrayName}.${index}.valueByTime.${i}.time`}
-              placeHolder="..."
               className="
     text-xs text-red-800 p-0 h-6
     border-0 shadow-none

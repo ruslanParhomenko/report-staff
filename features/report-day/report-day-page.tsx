@@ -118,15 +118,15 @@ export default function ReportDayPage() {
   return (
     <FormInput form={form} onSubmit={onSubmit}>
       <DatePickerInput fieldName="date" />
-      <Table>
+      <Table className="[&_td]:py-0">
         <TableBody>
-          <TableRow className=" bg-background">
-            <TableCell colSpan={13} className="h-12 text-red-800 text-center">
+          <TableRow className="bg-background border-0">
+            <TableCell colSpan={13} className=" text-red-800 text-center p-0">
               {!isOperational && "Выход за рабочий день смените дату"}
             </TableCell>
           </TableRow>
-          <TableRow className="h-10 text-muted-foreground">
-            <TableCell colSpan={4} className="text-red-800 font-bold">
+          <TableRow className="text-muted-foreground border-0 bg-gray-400">
+            <TableCell colSpan={12} className="text-red-800 font-bold">
               первое
             </TableCell>
           </TableRow>
@@ -136,8 +136,8 @@ export default function ReportDayPage() {
             form={form}
             disabled={!isOperational}
           />
-          <TableRow className="h-10 text-muted-foreground">
-            <TableCell colSpan={4} className="text-red-800 font-bold">
+          <TableRow className="text-muted-foreground border-0 bg-gray-400">
+            <TableCell colSpan={12} className="text-red-800 font-bold">
               второе и гарнир
             </TableCell>
           </TableRow>
@@ -148,8 +148,8 @@ export default function ReportDayPage() {
             disabled={!isOperational}
           />
 
-          <TableRow className="h-10 text-muted-foreground">
-            <TableCell colSpan={4} className="text-red-800 font-bold">
+          <TableRow className="text-muted-foreground border-0 bg-gray-400">
+            <TableCell colSpan={12} className="text-red-800 font-bold">
               сэндвичи и десерты
             </TableCell>
           </TableRow>

@@ -123,9 +123,9 @@ export default function NavTabs() {
       onValueChange={handleTabChange}
       className="sticky top-0 bg-background z-30"
     >
-      <div className="flex justify-between my-2 px-4">
+      <div className="flex justify-between mt-0.5 px-4">
         {navItems.length > 0 && (
-          <TabsList className="flex md:gap-4 h-8 ">
+          <TabsList className="flex md:gap-4 h-7!">
             {navItems.map((item) => (
               <TabsTrigger
                 key={item.value}
@@ -148,7 +148,9 @@ export default function NavTabs() {
               setMonth={setMonth}
               setYear={setYear}
               isLoading={isPending}
-              classNameMonthYear={navItems.length > 0 ? "md:w-22 w-10" : "w-24"}
+              classNameMonthYear={
+                navItems.length > 0 ? "md:w-22 w-10 " : "w-24"
+              }
             />
           )}
           <button onClick={() => signOut({ callbackUrl: "/" })}>
