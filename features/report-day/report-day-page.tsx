@@ -33,7 +33,7 @@ import { DatePickerInput } from "@/components/input/date-input";
 import { createReport } from "@/app/action/report/report-action";
 import { MONTHS } from "@/utils/get-month-days";
 import { useOperationalDayCheck } from "@/hooks/use-in-day";
-import { use, useEffect } from "react";
+import { useEffect } from "react";
 
 const KEY_STORAGE = "report-row-item";
 
@@ -83,6 +83,7 @@ export default function ReportDayPage() {
     toast.success("отчет сохранен");
 
     // form.reset(defaultValueReport);
+    form.setValue("date", new Date().toISOString().split("T")[0]);
   };
 
   useEffect(() => {

@@ -22,8 +22,10 @@ export default function ReportMonthBody({
         const valuesByDay = map[name] ?? [];
 
         return (
-          <TableRow key={name} className="h-10">
-            <TableCell className="px-2 font-medium text-sm">{name}</TableCell>
+          <TableRow key={name} className="h-6">
+            <TableCell className="px-2 font-medium text-xs p-0">
+              {name}
+            </TableCell>
             <TableCell />
 
             {monthDays.map((dayObj) => {
@@ -34,7 +36,7 @@ export default function ReportMonthBody({
               return (
                 <TableCell
                   key={`${name}-${dayObj.day}`}
-                  className="text-center text-sm"
+                  className="text-center text-xs p-0"
                 >
                   {found?.value ?? ""}
                 </TableCell>

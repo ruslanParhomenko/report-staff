@@ -9,9 +9,13 @@ import { NAV_BY_PATCH } from "./constants";
 import { MONTHS } from "@/utils/get-month-days";
 import SelectByMonthYear from "./select-month-year";
 import { LogOut } from "lucide-react";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 export default function NavTabs() {
+  const session = useSession();
+  const role = session.data?.user?.role;
+
+  const isDisabled = role !== "ADMIN";
   const pathname = usePathname();
 
   const searchParams = useSearchParams();
@@ -20,8 +24,13 @@ export default function NavTabs() {
 
   const STORAGE_KEY = `nav-tab-${pathname}`;
 
-  const [month, setMonth] = useState(() => MONTHS[new Date().getMonth()]);
-  const [year, setYear] = useState(() => new Date().getFullYear().toString());
+  const defaultMonth =
+    searchParams.get("month") || MONTHS[new Date().getMonth()];
+  const defaultYear =
+    searchParams.get("year") || new Date().getFullYear().toString();
+
+  const [month, setMonth] = useState(defaultMonth);
+  const [year, setYear] = useState(defaultYear);
 
   const config =
     NAV_BY_PATCH[pathname.split("/")[1] as keyof typeof NAV_BY_PATCH];
@@ -123,7 +132,7 @@ export default function NavTabs() {
       onValueChange={handleTabChange}
       className="sticky top-0 bg-background z-30"
     >
-      <div className="flex justify-between mt-0.5 px-4">
+      <div className="flex justify-between mt-0.5 md:px-4">
         {navItems.length > 0 && (
           <TabsList className="flex md:gap-4 h-7!">
             {navItems.map((item) => (
@@ -133,7 +142,7 @@ export default function NavTabs() {
                 className={cn("hover:text-bl cursor-pointer", tabsWidth)}
                 disabled={isPending}
               >
-                <span className="truncate block min-w-20 text-xs md:text-md text-bl">
+                <span className="truncate block md:min-w-20 w-14 text-xs md:text-md text-bl">
                   {item.label}
                 </span>
               </TabsTrigger>
@@ -151,6 +160,7 @@ export default function NavTabs() {
               classNameMonthYear={
                 navItems.length > 0 ? "md:w-22 w-10 " : "w-24"
               }
+              disabled={isDisabled || isPending}
             />
           )}
           <button onClick={() => signOut({ callbackUrl: "/" })}>

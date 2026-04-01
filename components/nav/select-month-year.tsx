@@ -14,6 +14,7 @@ export default function SelectByMonthYear({
   setYear,
   isLoading,
   classNameMonthYear,
+  disabled,
 }: {
   month: string;
   setMonth: (value: string) => void;
@@ -21,6 +22,7 @@ export default function SelectByMonthYear({
   setYear: (value: string) => void;
   isLoading?: boolean;
   classNameMonthYear?: string;
+  disabled: boolean;
 }) {
   const classNameSelect = `md:w-24 ${
     classNameMonthYear ? classNameMonthYear : "w-14"
@@ -30,7 +32,7 @@ export default function SelectByMonthYear({
       <Select
         value={month}
         onValueChange={(value) => setMonth(value)}
-        disabled={isLoading}
+        disabled={isLoading || disabled}
       >
         <SelectTrigger className={classNameSelect}>
           <SelectValue placeholder="month" />

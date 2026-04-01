@@ -60,7 +60,7 @@ export default function ReportRowItem({
     >
       <TableCell className="w-6">{index + 1}</TableCell>
 
-      <TableCell className="w-20">
+      <TableCell className="w-20 sticky left-0">
         <TextInput
           fieldName={`${arrayName}.${index}.name`}
           className={`w-50 border-0 shadow-none font-bold h-6 ${
