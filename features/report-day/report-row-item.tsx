@@ -1,9 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useWatch, UseFormReturn } from "react-hook-form";
 import TextInput from "@/components/input/text-input";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { ReportType } from "./schema";
 import { formatNow } from "@/utils/format-date";
+import { handleMultiTableNavigation } from "@/utils/handle-table-navigation";
 
 type ReportRowItemProps = {
   index: number;
@@ -18,6 +19,7 @@ export default function ReportRowItem({
   form,
   disabled,
 }: ReportRowItemProps) {
+  const [isRowFocused, setIsRowFocused] = useState(false);
   const values = useWatch({
     name: `${arrayName}.${index}.valueByTime`,
     control: form.control,
@@ -25,7 +27,9 @@ export default function ReportRowItem({
 
   useEffect(() => {
     if (!values) return;
+
     const total = values.reduce((acc, v) => acc + Number(v.value || 0), 0);
+
     if (form.getValues(`${arrayName}.${index}.value`) !== String(total)) {
       form.setValue(`${arrayName}.${index}.value`, String(total));
     }
@@ -35,9 +39,7 @@ export default function ReportRowItem({
         form.setValue(
           `${arrayName}.${index}.valueByTime.${idx}.time`,
           formatNow(),
-          {
-            shouldDirty: true,
-          },
+          { shouldDirty: true },
         );
       }
     });
@@ -46,12 +48,24 @@ export default function ReportRowItem({
   const items = form.getValues(`${arrayName}.${index}`);
 
   return (
-    <TableRow>
-      <TableCell className="w-6"> {index + 1}</TableCell>
+    <TableRow
+      onFocusCapture={() => setIsRowFocused(true)}
+      onBlurCapture={(e) => {
+        // если фокус ушёл ВНЕ строки
+        if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+          setIsRowFocused(false);
+        }
+      }}
+      className={isRowFocused ? "bg-gray-200" : ""}
+    >
+      <TableCell className="w-6">{index + 1}</TableCell>
+
       <TableCell className="w-20">
         <TextInput
           fieldName={`${arrayName}.${index}.name`}
-          className="w-50 border-0 shadow-none font-bold h-6"
+          className={`w-50 border-0 shadow-none font-bold h-6 ${
+            isRowFocused ? "text-red-500" : ""
+          }`}
           disabled={disabled}
         />
       </TableCell>
@@ -66,24 +80,22 @@ export default function ReportRowItem({
       {items?.valueByTime?.map((v, i) => (
         <TableCell key={i} className="w-30 p-0">
           <div className="flex gap-3 items-center">
-            <TextInput
-              fieldName={`${arrayName}.${index}.valueByTime.${i}.value`}
-              placeHolder="..."
-              className="w-12 h-6 border-0 border-x rounded-none shadow-none bg-transparent "
+            {/* VALUE */}
+            <input
+              {...form.register(`${arrayName}.${index}.valueByTime.${i}.value`)}
+              placeholder="..."
+              className="w-12 h-6 border-0 border-x rounded-none shadow-none bg-transparent px-2"
               disabled={disabled}
+              data-group={arrayName}
+              data-row={index}
+              data-col={i}
+              onKeyDown={handleMultiTableNavigation}
             />
-            <TextInput
-              fieldName={`${arrayName}.${index}.valueByTime.${i}.time`}
-              className="
-    text-xs text-red-800 p-0 h-6
-    border-0 shadow-none
-    outline-none
-    focus:outline-none
-    focus:ring-0
-    focus:border-0
-    focus-visible:ring-0
-    focus-visible:outline-none
-  "
+
+            {/* TIME */}
+            <input
+              {...form.register(`${arrayName}.${index}.valueByTime.${i}.time`)}
+              className="w-12 text-xs text-red-800 p-0 h-6 border-0 shadow-none outline-none"
               disabled
             />
           </div>

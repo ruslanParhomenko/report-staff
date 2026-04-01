@@ -82,7 +82,7 @@ export default function ReportDayPage() {
     });
     toast.success("отчет сохранен");
 
-    form.reset(defaultValueReport);
+    // form.reset(defaultValueReport);
   };
 
   useEffect(() => {
