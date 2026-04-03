@@ -2,18 +2,12 @@
 
 import * as React from "react";
 import { Calendar } from "@/components/ui/calendar";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput,
-} from "@/components/ui/input-group";
+import { InputGroup, InputGroupInput } from "@/components/ui/input-group";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { CalendarIcon } from "lucide-react";
 import {
   FormField,
   FormItem,
@@ -57,9 +51,14 @@ export function DatePickerInput({
         const [open, setOpen] = React.useState(false);
 
         return (
-          <FormItem className="w-48 mx-auto">
+          <FormItem className="w-24">
             <FormControl>
-              <Popover open={open} onOpenChange={setOpen}>
+              <Popover
+                open={disabled ? false : open}
+                onOpenChange={(v) => {
+                  if (!disabled) setOpen(v);
+                }}
+              >
                 <PopoverTrigger asChild>
                   <InputGroup className="border-0 text-blue-800 shadow-none h-6">
                     <InputGroupInput
@@ -67,15 +66,6 @@ export function DatePickerInput({
                       placeholder="June 01, 2025"
                       readOnly
                     />
-                    <InputGroupAddon align="inline-end">
-                      <InputGroupButton
-                        variant="ghost"
-                        size="icon-xs"
-                        aria-label="Select date"
-                      >
-                        <CalendarIcon className="text-blue-800 cursor-pointer" />
-                      </InputGroupButton>
-                    </InputGroupAddon>
                   </InputGroup>
                 </PopoverTrigger>
 
@@ -92,7 +82,6 @@ export function DatePickerInput({
                       field.onChange(formatValueLocal(date));
                       setOpen(false);
                     }}
-                    disabled={disabled}
                   />
                 </PopoverContent>
               </Popover>

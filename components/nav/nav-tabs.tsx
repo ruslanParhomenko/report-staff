@@ -10,6 +10,7 @@ import { MONTHS } from "@/utils/get-month-days";
 import SelectByMonthYear from "./select-month-year";
 import { LogOut } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
+import { Button } from "../ui/button";
 
 export default function NavTabs() {
   const session = useSession();
@@ -26,11 +27,8 @@ export default function NavTabs() {
 
   const defaultMonth =
     searchParams.get("month") || MONTHS[new Date().getMonth()];
-  const defaultYear =
-    searchParams.get("year") || new Date().getFullYear().toString();
 
   const [month, setMonth] = useState(defaultMonth);
-  const [year, setYear] = useState(defaultYear);
 
   const config =
     NAV_BY_PATCH[pathname.split("/")[1] as keyof typeof NAV_BY_PATCH];
@@ -85,10 +83,8 @@ export default function NavTabs() {
     if (!filterType) return;
 
     const monthFromUrl = searchParams.get("month");
-    const yearFromUrl = searchParams.get("year");
 
     if (monthFromUrl) setMonth(monthFromUrl);
-    if (yearFromUrl) setYear(yearFromUrl);
   }, [filterType, searchParams]);
 
   useEffect(() => {
@@ -97,19 +93,17 @@ export default function NavTabs() {
     const params = new URLSearchParams(searchParams.toString());
 
     const currentMonth = params.get("month");
-    const currentYear = params.get("year");
 
-    if (currentMonth === month && currentYear === year) return;
+    if (currentMonth === month) return;
 
     params.set("month", month);
-    params.set("year", year);
 
     startTransition(() => {
       router.replace(`${pathname}?${params.toString()}`, {
         scroll: false,
       });
     });
-  }, [month, year, filterType, pathname, router, searchParams]);
+  }, [month, filterType, pathname, router]);
 
   const handleTabChange = (value: string) => {
     localStorage.setItem(STORAGE_KEY, value);
@@ -149,13 +143,12 @@ export default function NavTabs() {
             ))}
           </TabsList>
         )}
+        <div className=""></div>
         <div className="flex justify-end gap-4">
           {filterType && (
             <SelectByMonthYear
               month={month}
-              year={year}
               setMonth={setMonth}
-              setYear={setYear}
               isLoading={isPending}
               classNameMonthYear={
                 navItems.length > 0 ? "md:w-22 w-10 " : "w-24"

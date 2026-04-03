@@ -14,6 +14,7 @@ export default function ReportMonthPage({
   month: string;
   year: string;
 }) {
+  console.log("data", data);
   const { uniqueNames, map } = buildProductMatrix(data);
 
   const monthDays = getMonthDays({ month, year });

@@ -5,21 +5,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { MONTHS, YEAR } from "@/utils/get-month-days";
+import { MONTHS } from "@/utils/get-month-days";
 
 export default function SelectByMonthYear({
   month,
   setMonth,
-  year,
-  setYear,
   isLoading,
   classNameMonthYear,
   disabled,
 }: {
   month: string;
   setMonth: (value: string) => void;
-  year: string;
-  setYear: (value: string) => void;
   isLoading?: boolean;
   classNameMonthYear?: string;
   disabled: boolean;
@@ -41,22 +37,6 @@ export default function SelectByMonthYear({
           {MONTHS.map((month) => (
             <SelectItem key={month} value={month}>
               {month}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      <Select
-        defaultValue={year}
-        onValueChange={(value) => setYear(value)}
-        disabled={isLoading}
-      >
-        <SelectTrigger className={classNameSelect}>
-          <SelectValue placeholder="year" />
-        </SelectTrigger>
-        <SelectContent>
-          {YEAR.map((year) => (
-            <SelectItem key={year} value={year}>
-              {year}
             </SelectItem>
           ))}
         </SelectContent>

@@ -1,7 +1,6 @@
 export const REPORT_NAV_ITEMS = [
   { label: "month", value: "month" },
   { label: "day", value: "day" },
-  { label: "year", value: "year" },
 ];
 
 type NAV_BY_PATCH_TYPE = Record<

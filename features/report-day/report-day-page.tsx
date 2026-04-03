@@ -9,13 +9,7 @@ import {
   useWatch,
 } from "react-hook-form";
 import { toast } from "sonner";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableFooter,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import {
   PRODUCTS_FIRST,
   PRODUCTS_SECOND,
@@ -34,6 +28,8 @@ import { createReport } from "@/app/action/report/report-action";
 import { MONTHS } from "@/utils/get-month-days";
 import { useOperationalDayCheck } from "@/hooks/use-in-day";
 import { useEffect } from "react";
+import { cleanReportData } from "@/utils/clean-data-submit";
+import { Button } from "@/components/ui/button";
 
 const KEY_STORAGE = "report-row-item";
 
@@ -65,30 +61,7 @@ export default function ReportDayPage() {
     name: "deserts",
   });
 
-  const isOperational = useOperationalDayCheck(date);
-
-  const onSubmit: SubmitHandler<ReportType> = async (data) => {
-    const { date, ...rest } = data;
-    const dateValue = new Date(date);
-    const month = MONTHS[dateValue.getMonth()];
-    const year = dateValue.getFullYear().toString();
-    const day = dateValue.getDate().toString();
-    const uniqueKey = `${year}-${month}`;
-
-    await createReport({
-      day: day,
-      uniqueKey: uniqueKey,
-      data: rest,
-    });
-    toast.success("отчет сохранен");
-
-    // form.reset(defaultValueReport);
-    form.setValue("date", new Date().toISOString().split("T")[0]);
-  };
-
-  useEffect(() => {
-    if (!isLoaded) return;
-
+  const resetArrays = () => {
     firstArray.replace(
       PRODUCTS_FIRST.map((name) => ({
         name,
@@ -112,13 +85,54 @@ export default function ReportDayPage() {
         valueByTime: defaultValueTime,
       })),
     );
+  };
+
+  const isOperational = useOperationalDayCheck(date);
+
+  const onSubmit: SubmitHandler<ReportType> = async (data) => {
+    const { date, ...rest } = data;
+    const cleanData = cleanReportData(rest);
+
+    const dateValue = new Date(date);
+    const month = MONTHS[dateValue.getMonth()];
+    const year = dateValue.getFullYear().toString();
+    const day = dateValue.getDate().toString();
+    const uniqueKey = `${year}-${month}`;
+
+    await createReport({
+      day: day,
+      uniqueKey: uniqueKey,
+      data: cleanData,
+    });
+    toast.success("отчет сохранен");
+
+    form.reset();
+    resetArrays();
+    form.setValue("date", new Date().toISOString().split("T")[0]);
+  };
+
+  useEffect(() => {
+    if (!isLoaded) return;
+
+    resetArrays();
   }, [isLoaded]);
 
   if (!isLoaded) return null;
 
+  const formId = "report-day-form";
+
   return (
-    <FormInput form={form} onSubmit={onSubmit}>
-      <DatePickerInput fieldName="date" />
+    <FormInput form={form} onSubmit={onSubmit} formId={formId}>
+      <div className="flex w-full justify-center items-center gap-6 mb-1">
+        <DatePickerInput fieldName="date" disabled />
+        <Button
+          form={formId}
+          type="submit"
+          className="h-6 w-24 bg-blue-500 text-white hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
+        >
+          сохранить
+        </Button>
+      </div>
       <Table className="[&_td]:py-0">
         <TableBody>
           <TableRow className="bg-background border-0">
@@ -126,39 +140,27 @@ export default function ReportDayPage() {
               {!isOperational && "Выход за рабочий день смените дату"}
             </TableCell>
           </TableRow>
-          <TableRow className="text-muted-foreground border-0 bg-gray-400">
-            <TableCell colSpan={12} className="text-red-800 font-bold">
-              первое
-            </TableCell>
-          </TableRow>
+
           <ReportRow
             data={PRODUCTS_FIRST}
             arrayName="first"
             form={form}
             disabled={!isOperational}
+            className="[&>td]:text-blue-400"
           />
-          <TableRow className="text-muted-foreground border-0 bg-gray-400">
-            <TableCell colSpan={12} className="text-red-800 font-bold">
-              второе и гарнир
-            </TableCell>
-          </TableRow>
           <ReportRow
             data={PRODUCTS_SECOND}
             arrayName="second"
             form={form}
             disabled={!isOperational}
+            className="[&>td]:text-black"
           />
-
-          <TableRow className="text-muted-foreground border-0 bg-gray-400">
-            <TableCell colSpan={12} className="text-red-800 font-bold">
-              сэндвичи и десерты
-            </TableCell>
-          </TableRow>
           <ReportRow
             data={PRODUCTS_SNACKS}
             arrayName="deserts"
             form={form}
             disabled={!isOperational}
+            className="[&>td]:text-red-400"
           />
         </TableBody>
       </Table>

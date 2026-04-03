@@ -25,9 +25,9 @@ export const createReport = async (payload: ReportCreateType) => {
   const { uniqueKey, day, data } = payload;
 
   const docRef = dbAdmin.collection(REPORT_STAFF_ACTION_TAG).doc(uniqueKey);
-
   const snap = await docRef.get();
 
+  // если документа нет — создаём сразу с одним днем
   if (!snap.exists) {
     await docRef.set({
       data: [
@@ -45,13 +45,20 @@ export const createReport = async (payload: ReportCreateType) => {
   const raw = snap.data();
   if (!raw || !Array.isArray(raw.data)) return;
 
-  const newData = [
-    ...raw.data,
-    {
-      day,
-      data, // ✅ без лишней вложенности
-    },
-  ];
+  // 🔥 ключевая логика
+  const existingIndex = raw.data.findIndex((item: any) => item.day === day);
+
+  let newData;
+
+  if (existingIndex !== -1) {
+    // ✅ день уже есть → перезаписываем
+    newData = raw.data.map((item: any, index: number) =>
+      index === existingIndex ? { day, data } : item,
+    );
+  } else {
+    // ✅ дня нет → добавляем
+    newData = [...raw.data, { day, data }];
+  }
 
   await docRef.update({ data: newData });
 

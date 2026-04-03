@@ -5,12 +5,14 @@ import { TableCell, TableRow } from "@/components/ui/table";
 import { ReportType } from "./schema";
 import { formatNow } from "@/utils/format-date";
 import { handleMultiTableNavigation } from "@/utils/handle-table-navigation";
+import { cn } from "@/lib/utils";
 
 type ReportRowItemProps = {
   index: number;
   arrayName: keyof Omit<ReportType, "date">;
   form: UseFormReturn<ReportType>;
   disabled?: boolean;
+  className?: string;
 };
 
 export default function ReportRowItem({
@@ -18,6 +20,7 @@ export default function ReportRowItem({
   arrayName,
   form,
   disabled,
+  className,
 }: ReportRowItemProps) {
   const [isRowFocused, setIsRowFocused] = useState(false);
   const values = useWatch({
@@ -51,12 +54,11 @@ export default function ReportRowItem({
     <TableRow
       onFocusCapture={() => setIsRowFocused(true)}
       onBlurCapture={(e) => {
-        // если фокус ушёл ВНЕ строки
         if (!e.currentTarget.contains(e.relatedTarget as Node)) {
           setIsRowFocused(false);
         }
       }}
-      className={isRowFocused ? "bg-gray-200" : ""}
+      className={cn(isRowFocused ? "bg-gray-200" : "", className)}
     >
       <TableCell className="w-6">{index + 1}</TableCell>
 
@@ -74,17 +76,16 @@ export default function ReportRowItem({
         <TextInput
           fieldName={`${arrayName}.${index}.value`}
           className="w-12 border-0 shadow-none font-bold h-6"
+          disabled
         />
       </TableCell>
 
       {items?.valueByTime?.map((v, i) => (
         <TableCell key={i} className="w-30 p-0">
           <div className="flex gap-3 items-center">
-            {/* VALUE */}
             <input
               {...form.register(`${arrayName}.${index}.valueByTime.${i}.value`)}
-              placeholder="..."
-              className="w-12 h-6 border-0 border-x rounded-none shadow-none bg-transparent px-2"
+              className="w-12 h-6 border rounded-md m-0.5 shadow-none bg-gray-100 px-2 cursor-pointer"
               disabled={disabled}
               data-group={arrayName}
               data-row={index}
@@ -92,7 +93,6 @@ export default function ReportRowItem({
               onKeyDown={handleMultiTableNavigation}
             />
 
-            {/* TIME */}
             <input
               {...form.register(`${arrayName}.${index}.valueByTime.${i}.time`)}
               className="w-12 text-xs text-red-800 p-0 h-6 border-0 shadow-none outline-none"

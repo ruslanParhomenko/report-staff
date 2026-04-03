@@ -3,12 +3,12 @@
 import { SubmitHandler, UseFormReturn, FieldValues } from "react-hook-form";
 import { cn } from "@/lib/utils";
 import { Form } from "../ui/form";
-import { Button } from "../ui/button";
 import { useState } from "react";
 import ModalConfirm from "../modal/modal-confirm";
 
 type FormInputProps<T extends FieldValues> = {
   form: UseFormReturn<T>;
+  formId: string;
   onSubmit: SubmitHandler<T>;
   children: React.ReactNode;
   className?: string;
@@ -16,6 +16,7 @@ type FormInputProps<T extends FieldValues> = {
 
 export default function FormInput<T extends FieldValues>({
   form,
+  formId,
   onSubmit,
   children,
   className,
@@ -32,13 +33,10 @@ export default function FormInput<T extends FieldValues>({
       <form
         className={cn("flex flex-col h-[96vh]", className)}
         onSubmit={form.handleSubmit(handleFormSubmit)}
+        id={formId}
       >
         {children}
-        <div className="sticky bottom-0 w-full flex justify-start gap-6 px-4 py-1 mt-auto bg-background z-30">
-          <Button type="submit" className=" mt-auto h-7 w-24">
-            save
-          </Button>
-        </div>
+
         <ModalConfirm
           open={isModalOpen}
           setOpen={setIsModalOpen}
