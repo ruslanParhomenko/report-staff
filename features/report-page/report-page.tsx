@@ -8,16 +8,18 @@ export default function ReportPage({
   month,
   year,
   tab,
+  isAdmin,
 }: {
   dataByMonth: GetReportType | null;
   month: string;
   year: string;
   tab: string;
+  isAdmin: boolean;
 }) {
   return (
     <>
       <Activity mode={tab === "day" ? "visible" : "hidden"}>
-        <ReportDayPage />
+        <ReportDayPage isAdmin={isAdmin} />
       </Activity>
       <Activity mode={tab === "month" ? "visible" : "hidden"}>
         <ReportMonthPage data={dataByMonth} month={month} year={year} />

@@ -16,6 +16,7 @@ export default async function Page({
   if (!session) {
     redirect("/");
   }
+  const isAdmin = session.user?.role === "ADMIN";
   if (!SET_ACCESS.includes(session.user?.role ?? "")) {
     redirect("/");
   }
@@ -27,6 +28,12 @@ export default async function Page({
   const dataByMonth =
     tab === "month" ? await getReportDataByUniqueKey(uniqueKey) : null;
   return (
-    <ReportPage dataByMonth={dataByMonth} month={month} year={year} tab={tab} />
+    <ReportPage
+      dataByMonth={dataByMonth}
+      month={month}
+      year={year}
+      tab={tab}
+      isAdmin={isAdmin}
+    />
   );
 }

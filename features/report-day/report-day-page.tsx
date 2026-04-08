@@ -9,7 +9,7 @@ import {
   useWatch,
 } from "react-hook-form";
 import { toast } from "sonner";
-import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { Table, TableBody } from "@/components/ui/table";
 import {
   PRODUCTS_FIRST,
   PRODUCTS_SECOND,
@@ -27,13 +27,12 @@ import { DatePickerInput } from "@/components/input/date-input";
 import { createReport } from "@/app/action/report/report-action";
 import { MONTHS } from "@/utils/get-month-days";
 import { useOperationalDayCheck } from "@/hooks/use-in-day";
-import { useEffect } from "react";
 import { cleanReportData } from "@/utils/clean-data-submit";
 import { Button } from "@/components/ui/button";
 
 const KEY_STORAGE = "report-row-item";
 
-export default function ReportDayPage() {
+export default function ReportDayPage({ isAdmin }: { isAdmin: boolean }) {
   const form = useForm<ReportType>({
     defaultValues: defaultValueReport,
     resolver: zodResolver(reportSchema),
@@ -111,11 +110,11 @@ export default function ReportDayPage() {
     form.setValue("date", new Date().toISOString().split("T")[0]);
   };
 
-  useEffect(() => {
-    if (!isLoaded) return;
+  // useEffect(() => {
+  //   if (!isLoaded) return;
 
-    resetArrays();
-  }, [isLoaded]);
+  //   resetArrays();
+  // }, [isLoaded]);
 
   if (!isLoaded) return null;
 
@@ -124,7 +123,10 @@ export default function ReportDayPage() {
   return (
     <FormInput form={form} onSubmit={onSubmit} formId={formId}>
       <div className="flex w-full justify-center items-center gap-6 mb-1">
-        <DatePickerInput fieldName="date" disabled />
+        <div className=" text-red-800 text-center p-0">
+          {!isOperational && "выплните сохранение отчета"}
+        </div>
+        <DatePickerInput fieldName="date" disabled={!isAdmin} />
         <Button
           form={formId}
           type="submit"
@@ -135,12 +137,6 @@ export default function ReportDayPage() {
       </div>
       <Table className="[&_td]:py-0">
         <TableBody>
-          <TableRow className="bg-background border-0">
-            <TableCell colSpan={13} className=" text-red-800 text-center p-0">
-              {!isOperational && "Выход за рабочий день смените дату"}
-            </TableCell>
-          </TableRow>
-
           <ReportRow
             data={PRODUCTS_FIRST}
             arrayName="first"
