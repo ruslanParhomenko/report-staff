@@ -85,7 +85,8 @@ export default function ReportRowItem({
           <div className="flex gap-3 items-center">
             <input
               {...form.register(`${arrayName}.${index}.valueByTime.${i}.value`)}
-              className="w-12 h-6 border rounded-md m-0.5 shadow-none bg-gray-100 px-2 cursor-pointer"
+              className="w-12 h-6 border rounded-md m-0.5 shadow-none  px-2 cursor-pointer"
+              style={{ backgroundColor: "gray" }}
               disabled={disabled}
               data-group={arrayName}
               data-row={index}
