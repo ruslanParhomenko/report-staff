@@ -29,6 +29,7 @@ import { MONTHS } from "@/utils/get-month-days";
 import { useOperationalDayCheck } from "@/hooks/use-in-day";
 import { cleanReportData } from "@/utils/clean-data-submit";
 import { Button } from "@/components/ui/button";
+import { useEffect } from "react";
 
 const KEY_STORAGE = "report-row-item";
 
@@ -89,6 +90,7 @@ export default function ReportDayPage({ isAdmin }: { isAdmin: boolean }) {
   const isOperational = useOperationalDayCheck(date);
 
   const onSubmit: SubmitHandler<ReportType> = async (data) => {
+    console.log(data);
     const { date, ...rest } = data;
     const cleanData = cleanReportData(rest);
 
@@ -110,11 +112,11 @@ export default function ReportDayPage({ isAdmin }: { isAdmin: boolean }) {
     form.setValue("date", new Date().toISOString().split("T")[0]);
   };
 
-  // useEffect(() => {
-  //   if (!isLoaded) return;
+  useEffect(() => {
+    if (!isLoaded) return;
 
-  //   resetArrays();
-  // }, [isLoaded]);
+    resetArrays();
+  }, [isLoaded]);
 
   if (!isLoaded) return null;
 
