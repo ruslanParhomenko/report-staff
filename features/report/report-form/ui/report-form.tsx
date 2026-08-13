@@ -122,6 +122,18 @@ export function ReportFormPage({
   const onSubmit: SubmitHandler<ReportType> = async (data) => {
     const cleanData = cleanReportData(data);
 
+    console.log("cleanData", cleanData);
+
+    if (!cleanData) {
+      toast.error("Заполните все поля", {
+        style: {
+          background: "#ef4444",
+          color: "#fff",
+        },
+      });
+      return;
+    }
+
     const { year, month, time, reportDay, timeMs } = formatNow();
 
     await createReport({
@@ -134,6 +146,9 @@ export function ReportFormPage({
     });
 
     form.reset();
+    setTimeout(() => {
+      toast.success("data submitted");
+    }, 2000);
   };
 
   const defaultFieldValue = {

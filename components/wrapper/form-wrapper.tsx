@@ -38,10 +38,6 @@ export default function FormInput<T extends FieldValues>({
     setFormDataToSubmit(null);
 
     await onSubmit(data);
-
-    setTimeout(() => {
-      toast.success("data submitted");
-    }, 2000);
   };
 
   return (
