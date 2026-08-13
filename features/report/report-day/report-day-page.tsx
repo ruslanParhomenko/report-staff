@@ -3,7 +3,7 @@
 import SelectDay from "@/components/input/select-day";
 import { GetReportData } from "../report-form/model/type";
 import { getMonthDays } from "@/utils/get-month-days";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ReportTable from "./report-day-table";
 
 export default function ReportDayPage({

@@ -35,11 +35,11 @@ export default async function RootLayout({
         <SessionProviders>
           <Toaster position="top-center" />
 
-          <div className="flex flex-col h-screen w-screen overflow-y-auto px-4">
+          <div className="flex flex-col px-4 justify-between h-dvh">
             <Suspense fallback={null}>
               <HeaderBar />
             </Suspense>
-            {children}
+            <div className="flex-1">{children}</div>
             <FooterBar />
           </div>
         </SessionProviders>
