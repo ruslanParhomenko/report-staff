@@ -5,6 +5,7 @@ import { SessionProviders } from "@/providers/session-providers";
 import { Toaster } from "sonner";
 import { Suspense } from "react";
 import HeaderBar from "@/components/nav-layout/header-layout/header-layout";
+import FooterBar from "@/components/nav-layout/footer-layout/footer-layout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,6 +40,7 @@ export default async function RootLayout({
               <HeaderBar />
             </Suspense>
             {children}
+            <FooterBar />
           </div>
         </SessionProviders>
       </body>

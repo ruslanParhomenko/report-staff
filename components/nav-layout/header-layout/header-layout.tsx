@@ -7,11 +7,16 @@ import { useEffect, useEffectEvent, useState, useTransition } from "react";
 import { NAV_BY_PATCH } from "./constants";
 import NavTabs from "@/components/nav-tabs/nav-tabs";
 import SelectOptions from "@/components/input/select-options";
+import { useSession } from "next-auth/react";
 
 export default function HeaderBar() {
   const pathname = usePathname();
   const mainRoute = pathname.split("/")[1] || "";
   const searchParams = useSearchParams();
+
+  const { data } = useSession();
+
+  const userRole = data?.user?.role;
 
   const router = useRouter();
 
@@ -28,7 +33,9 @@ export default function HeaderBar() {
 
   const navItems: readonly string[] = config?.tabs ?? [];
 
-  const activeTab = searchParams.get("tab") || navItems[0] || "";
+  const defaultTab = userRole === "cucina" ? "form" : navItems[0] || "";
+
+  const activeTab = searchParams.get("tab") || defaultTab;
 
   const urlMonth = searchParams.get("month");
   const urlYear = searchParams.get("year");
