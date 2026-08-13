@@ -40,7 +40,5 @@ export async function createReport(data: ReportFormData) {
 
   updateTag(actionTag);
 
-  invalidateEverywhere(actionTag);
-
   return docRefByDay.id;
 }

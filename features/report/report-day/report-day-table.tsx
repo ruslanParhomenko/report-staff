@@ -21,8 +21,6 @@ export default function ReportTable({
 }: {
   dataByDay: GetReportData | null;
 }) {
-  console.log("dataByDay", dataByDay);
-
   if (!dataByDay?.reports?.length) {
     return (
       <div className="py-10 text-center text-sm text-muted-foreground">
@@ -87,24 +85,24 @@ export default function ReportTable({
             </TableHead>
           ))}
 
-          <TableHead className="min-w-25 text-center" />
+          <TableHead className="min-w-25 text-center">всего</TableHead>
         </TableRow>
       </TableHeader>
 
       <TableBody>
         {products.map((product) => (
-          <TableRow key={product.name} className="[&>td]:border-r">
+          <TableRow key={product.name}>
             <TableCell className="sticky left-0 z-10 bg-background font-medium">
               {product.name}
             </TableCell>
 
             {timeColumns.map((column) => (
-              <TableCell key={column.timeMs} className="text-center">
+              <TableCell key={column.timeMs} className="text-center border-l">
                 {product.values[column.timeMs] ?? ""}
               </TableCell>
             ))}
 
-            <TableCell className="text-center font-semibold">
+            <TableCell className="text-center font-semibold border-l">
               {product.total}
             </TableCell>
           </TableRow>

@@ -1,6 +1,9 @@
 import { headers } from "next/headers";
 import { getDataProducts } from "../action/data-products/get-data-products";
-import { getReportsByYear } from "@/features/report/report-form/actions/get-report";
+import {
+  getReportsByMonth,
+  getReportsByYear,
+} from "@/features/report/report-form/actions/get-report";
 import { ReportPage } from "@/features/report";
 
 export default async function Page({
@@ -16,11 +19,13 @@ export default async function Page({
   const year = new Date().getFullYear().toString();
 
   const dataProducts = await getDataProducts();
-  const dataReport = await getReportsByYear(year, month);
+  const dataReportByMonth = await getReportsByMonth(year, month);
+  const dataReportByYear = await getReportsByYear(year);
   return (
     <ReportPage
       dataProducts={dataProducts}
-      dataReport={dataReport}
+      dataReportByMonth={dataReportByMonth}
+      dataReportByYear={dataReportByYear}
       month={month}
       year={year}
       isAdmin={isAdmin}
