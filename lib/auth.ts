@@ -18,10 +18,10 @@ export const authOptions: NextAuthOptions = {
 
   pages: {
     signIn: "/signin",
-    error: "/403",
+    error: "/no-access",
   },
 
-  debug: true,
+  debug: process.env.NODE_ENV === "development",
 
   callbacks: {
     async jwt({ token, account, profile }) {
@@ -41,15 +41,18 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
 
-    async signIn({ user, account, profile }) {
-      const users = await getUsers();
-      const dbUser = users.find((u) => u.mail === profile?.email);
+    async signIn({ profile }) {
+      try {
+        const users = (await getUsers()).filter((u) => u.status);
+        const dbUser = users.find((u) => u.mail === profile?.email);
 
-      if (!dbUser) {
-        return "/403";
+        if (!dbUser) return "/no-access";
+
+        return true;
+      } catch (e) {
+        console.error("SIGNIN ERROR:", e);
+        return "/no-access";
       }
-
-      return true;
     },
   },
 };

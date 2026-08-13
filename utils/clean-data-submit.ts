@@ -1,15 +1,15 @@
 export const cleanReportData = (rest: any) => {
-  const isValid = (v: any) => v !== "" && v !== "0" && v !== 0 && v != null;
+  const isValid = (item: any) =>
+    item?.name != null &&
+    item.name !== "" &&
+    item?.value != null &&
+    item.value !== "" &&
+    item.value !== "0" &&
+    item.value !== 0;
 
   return Object.fromEntries(
-    Object.entries(rest).map(([key, items]: any) => [
-      key,
-      items
-        .filter((item: any) => isValid(item.value))
-        .map((item: any) => ({
-          ...item,
-          valueByTime: item.valueByTime.filter((v: any) => isValid(v.value)),
-        })),
-    ]),
+    Object.entries(rest)
+      .map(([key, items]: any) => [key, items.filter(isValid)])
+      .filter(([, items]: any) => items.length > 0),
   );
 };

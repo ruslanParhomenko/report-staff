@@ -7,6 +7,7 @@ export type UserData = {
   id: string;
   mail: string;
   role: string;
+  status: boolean;
 };
 
 const USERS_KEY = "users";

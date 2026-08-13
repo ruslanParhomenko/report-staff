@@ -16,7 +16,7 @@ export function DayByMonthTable({
   const todayDay = new Date().getDate();
   return (
     <TableHeader className="sticky top-0 bg-background z-20">
-      <TableRow className="h-10">
+      <TableRow className="h-9">
         <TableCell
           colSpan={2}
           className="p-0 px-1 front-bold text-center text-xs"
@@ -28,17 +28,20 @@ export function DayByMonthTable({
           return (
             <TableCell
               key={day.day}
-              className={cn(
-                "w-14 cursor-pointer p-0 ",
-                day.day === todayDay && "text-rd front-bold",
-                className,
-              )}
+              className={cn("w-14 cursor-pointer p-0", className)}
             >
-              <div className="text-sm font-semibold text-center">{day.day}</div>
+              <div
+                className={cn(
+                  "text-xs text-center text-blue-500",
+                  day.day === todayDay && "text-red-600",
+                )}
+              >
+                {day.day}
+              </div>
               <div
                 className={cn(
                   "text-xs text-muted-foreground text-center",
-                  day.day === todayDay && "text-rd",
+                  day.day === todayDay && "text-red-600",
                 )}
               >
                 {day.weekday}

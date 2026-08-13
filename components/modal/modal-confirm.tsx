@@ -2,31 +2,44 @@ import { Button } from "../ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "../ui/dialog";
 
+type ModalConfirmProps = {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  handleConfirm: () => void | Promise<void>;
+};
+
 export default function ModalConfirm({
   open,
   setOpen,
   handleConfirm,
-}: {
-  open: boolean;
-  setOpen: (open: boolean) => void;
-  handleConfirm: () => void;
-}) {
+}: ModalConfirmProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle></DialogTitle>
+          <DialogTitle>Подтвердите сохранение</DialogTitle>
+
+          <DialogDescription />
         </DialogHeader>
+
         <DialogFooter>
-          <Button variant="outline" onClick={() => setOpen(false)}>
-            cancel
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => setOpen(false)}
+          >
+            Отмена
           </Button>
-          <Button onClick={handleConfirm}>confirm</Button>
+
+          <Button type="button" onClick={handleConfirm}>
+            Сохранить
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

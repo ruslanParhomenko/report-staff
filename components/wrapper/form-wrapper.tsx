@@ -5,10 +5,10 @@ import { cn } from "@/lib/utils";
 import { Form } from "../ui/form";
 import { useState } from "react";
 import ModalConfirm from "../modal/modal-confirm";
+import { toast } from "sonner";
 
 type FormInputProps<T extends FieldValues> = {
   form: UseFormReturn<T>;
-  formId: string;
   onSubmit: SubmitHandler<T>;
   children: React.ReactNode;
   className?: string;
@@ -16,7 +16,6 @@ type FormInputProps<T extends FieldValues> = {
 
 export default function FormInput<T extends FieldValues>({
   form,
-  formId,
   onSubmit,
   children,
   className,
@@ -28,28 +27,40 @@ export default function FormInput<T extends FieldValues>({
     setFormDataToSubmit(data);
     setIsModalOpen(true);
   };
+
+  const handleConfirm = async () => {
+    if (!formDataToSubmit) return;
+
+    setIsModalOpen(false);
+
+    const data = formDataToSubmit;
+
+    setFormDataToSubmit(null);
+
+    await onSubmit(data);
+
+    setTimeout(() => {
+      toast.success("data submitted");
+    }, 2000);
+  };
+
   return (
     <Form {...form}>
       <form
-        className={cn("flex flex-col h-[96vh]", className)}
+        className={cn(
+          "flex flex-col items-center justify-center h-[90vh]",
+          className,
+        )}
         onSubmit={form.handleSubmit(handleFormSubmit)}
-        id={formId}
       >
         {children}
-
-        <ModalConfirm
-          open={isModalOpen}
-          setOpen={setIsModalOpen}
-          handleConfirm={async () => {
-            if (!formDataToSubmit) return;
-
-            await onSubmit(formDataToSubmit);
-
-            setIsModalOpen(false);
-            setFormDataToSubmit(null);
-          }}
-        />
       </form>
+
+      <ModalConfirm
+        open={isModalOpen}
+        setOpen={setIsModalOpen}
+        handleConfirm={handleConfirm}
+      />
     </Form>
   );
 }

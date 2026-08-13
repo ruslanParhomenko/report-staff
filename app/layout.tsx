@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SessionProviders } from "@/providers/session-providers";
-import NavTabs from "@/components/nav/nav-tabs";
 import { Toaster } from "sonner";
 import { Suspense } from "react";
+import HeaderBar from "@/components/nav-layout/header-layout/header-layout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,7 +36,7 @@ export default async function RootLayout({
 
           <div className="flex flex-col h-screen w-screen overflow-y-auto px-4">
             <Suspense fallback={null}>
-              <NavTabs />
+              <HeaderBar />
             </Suspense>
             {children}
           </div>
