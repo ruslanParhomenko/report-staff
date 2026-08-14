@@ -4,20 +4,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import FormInput from "@/components/wrapper/form-wrapper";
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
-
 import { defaultValueReport, reportSchema, ReportType } from "../model/schema";
-
 import { cleanReportData } from "@/utils/clean-data-submit";
-
 import { DataProducts } from "@/types/data-products";
 import { createReport } from "../actions/create-report-day";
-
-import SelectInputWithSearch from "@/components/input/select-input-search";
-import NumericInput from "@/components/input/numeric-input";
-
 import { Button } from "@/components/ui/button";
-import { AddRemoveFieldsButton } from "@/components/buttons/action-fields-button";
 import { formatNow } from "@/utils/format-date";
 import { useSession } from "next-auth/react";
 import ReportSection from "./report-section";
@@ -92,10 +83,10 @@ export function ReportFormPage({
     await createReport({
       year,
       month,
-      day: "13",
-      time: "01:40:00",
+      day: reportDay,
+      time,
       products: cleanData,
-      timeMs: 1786574400000,
+      timeMs,
     });
 
     form.reset();

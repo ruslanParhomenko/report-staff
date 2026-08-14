@@ -33,7 +33,7 @@ export function MonthByYearTable({
   return (
     <TableHeader className="sticky top-0 bg-background z-20">
       <TableRow className="h-9">
-        <TableCell className="p-0 px-1 font-bold text-center text-xs w-30">
+        <TableCell className="p-0 px-1 font-bold text-center text-xs w-40">
           {year}
         </TableCell>
 
@@ -43,7 +43,7 @@ export function MonthByYearTable({
           return (
             <TableCell
               key={month}
-              className={cn("w-16 cursor-pointer p-0", className)}
+              className={cn("w-12 cursor-pointer p-0", className)}
             >
               <div
                 className={cn(
@@ -51,7 +51,7 @@ export function MonthByYearTable({
                   isCurrent && "text-red-600",
                 )}
               >
-                {MONTH_LABELS[month] ?? month}
+                {MONTH_LABELS[month].slice(0, 3)}
               </div>
             </TableCell>
           );

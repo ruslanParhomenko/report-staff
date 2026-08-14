@@ -45,7 +45,7 @@ export default function ReportMonthBody({ data, monthDays }: Props) {
             return (
               <TableCell
                 key={`${name}-${dayObj.day}`}
-                className="text-center text-xs p-0"
+                className="text-center text-xs p-0 border-l"
               >
                 {value ?? ""}
               </TableCell>

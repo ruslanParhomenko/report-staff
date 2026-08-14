@@ -28,16 +28,21 @@ export default function ModalConfirm({
           <DialogDescription />
         </DialogHeader>
 
-        <DialogFooter>
+        <DialogFooter className="flex gap-16">
           <Button
             type="button"
             variant="outline"
             onClick={() => setOpen(false)}
+            className="bg-red-600 text-white w-30"
           >
             Отмена
           </Button>
 
-          <Button type="button" onClick={handleConfirm}>
+          <Button
+            type="button"
+            onClick={handleConfirm}
+            className="w-30 bg-blue-600 text-white"
+          >
             Сохранить
           </Button>
         </DialogFooter>

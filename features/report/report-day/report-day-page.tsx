@@ -36,6 +36,8 @@ export default function ReportDayPage({
 
     const startTime = Date.now();
 
+    setSelectedDay(new Date().getDate().toString());
+
     startTransition(() => {
       router.refresh();
     });

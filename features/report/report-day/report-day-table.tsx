@@ -71,21 +71,21 @@ export default function ReportTable({
   );
 
   return (
-    <Table className="border-b">
+    <Table className="border-b table-fixed">
       <TableHeader>
         <TableRow>
-          <TableHead className="sticky left-0 z-10 min-w-55  bg-background" />
+          <TableHead className="sticky left-0 z-10 w-50  bg-background" />
 
           {timeColumns.map((column) => (
             <TableHead
               key={column.timeMs}
-              className="min-w-25  text-center text-xs text-red-600"
+              className="w-25  text-center text-xs text-red-600"
             >
               {column.time}
             </TableHead>
           ))}
 
-          <TableHead className="min-w-25 text-center">всего</TableHead>
+          <TableHead className="w-25 text-center">всего</TableHead>
         </TableRow>
       </TableHeader>
 
