@@ -44,7 +44,12 @@ export function AddRemoveFieldsButton({
           onClick={() => formField.append(defaultValues)}
           disabled={disabled}
         >
-          <PlusIcon className="text-blue-600 size-4 cursor-pointer font-bold" />
+          <PlusIcon
+            className={cn(
+              "text-blue-600 size-4 cursor-pointer font-bold",
+              disabled && "opacity-50",
+            )}
+          />
         </button>
       ) : (
         <div className="h-8 w-4"></div>
@@ -55,7 +60,12 @@ export function AddRemoveFieldsButton({
         onClick={handleRemove}
         disabled={disabled}
       >
-        <Trash2Icon className="text-red-600 size-4 cursor-pointer" />
+        <Trash2Icon
+          className={cn(
+            "text-red-600 size-4 cursor-pointer",
+            disabled && "opacity-50",
+          )}
+        />
       </button>
     </div>
   );

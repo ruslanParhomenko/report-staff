@@ -44,7 +44,7 @@ export default function FormInput<T extends FieldValues>({
     <Form {...form}>
       <form
         className={cn(
-          "flex flex-col items-center justify-center h-[90vh]",
+          "flex flex-col items-center justify-center h-[80vh]",
           className,
         )}
         onSubmit={form.handleSubmit(handleFormSubmit)}

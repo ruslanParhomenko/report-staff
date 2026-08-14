@@ -8,12 +8,9 @@ import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 
 import { defaultValueReport, reportSchema, ReportType } from "../model/schema";
 
-import { MONTHS } from "@/utils/get-month-days";
-
 import { cleanReportData } from "@/utils/clean-data-submit";
 
 import { DataProducts } from "@/types/data-products";
-import { getReportDate } from "../lib/get-report-date";
 import { createReport } from "../actions/create-report-day";
 
 import SelectInputWithSearch from "@/components/input/select-input-search";
@@ -22,61 +19,19 @@ import NumericInput from "@/components/input/numeric-input";
 import { Button } from "@/components/ui/button";
 import { AddRemoveFieldsButton } from "@/components/buttons/action-fields-button";
 import { formatNow } from "@/utils/format-date";
-
-interface SectionProps {
-  title: string;
-  fieldArray: any;
-  products: string[];
-  fieldNamePrefix: string;
-  defaultValues: any;
-}
-
-function ReportSection({
-  title,
-  fieldArray,
-  products,
-  fieldNamePrefix,
-  defaultValues,
-}: SectionProps) {
-  return (
-    <div className="w-full flex flex-col items-center justify-center">
-      <h3 className="text-md font-semibold mb-2 text-gray-500">{title}</h3>
-      <div className="flex justify-center">
-        <Table className="w-auto">
-          <TableBody>
-            {fieldArray.fields.map((field: any, index: number) => (
-              <TableRow key={field.id} className="border-0">
-                <TableCell className="flex gap-4 items-center justify-center py-0.5 px-4">
-                  <SelectInputWithSearch
-                    data={products}
-                    fieldName={`${fieldNamePrefix}.${index}.name`}
-                    className="w-80 shadow-none font-bold h-9 text-xl px-4"
-                  />
-                  <NumericInput
-                    fieldName={`${fieldNamePrefix}.${index}.value`}
-                    className="shadow-none font-bold h-9 w-20 text-xl!"
-                  />
-                  <AddRemoveFieldsButton
-                    formField={fieldArray}
-                    defaultValues={defaultValues}
-                    index={index}
-                    limit={2}
-                  />
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
-    </div>
-  );
-}
+import { useSession } from "next-auth/react";
+import ReportSection from "./report-section";
 
 export function ReportFormPage({
   dataProducts,
 }: {
   dataProducts: DataProducts | null;
 }) {
+  const { data } = useSession();
+
+  const role = data?.user?.role;
+  const isDisabled = role !== "ADMIN" && role !== "CUCINA";
+
   const PRODUCTS_FIRST = dataProducts?.staff_first || [];
   const PRODUCTS_SECOND = dataProducts?.staff_main || [];
   const PRODUCTS_SNACKS = dataProducts?.staff_snacks || [];
@@ -122,8 +77,6 @@ export function ReportFormPage({
   const onSubmit: SubmitHandler<ReportType> = async (data) => {
     const cleanData = cleanReportData(data);
 
-    console.log("cleanData", cleanData);
-
     if (!cleanData) {
       toast.error("Заполните все поля", {
         style: {
@@ -139,10 +92,10 @@ export function ReportFormPage({
     await createReport({
       year,
       month,
-      day: reportDay,
-      time,
+      day: "13",
+      time: "01:40:00",
       products: cleanData,
-      timeMs,
+      timeMs: 1786574400000,
     });
 
     form.reset();
@@ -165,6 +118,7 @@ export function ReportFormPage({
           products={PRODUCTS_FIRST}
           fieldNamePrefix="first"
           defaultValues={defaultFieldValue}
+          isDisabled={isDisabled}
         />
 
         <div className="w-full h-px bg-gray-200" />
@@ -175,6 +129,7 @@ export function ReportFormPage({
           products={PRODUCTS_SECOND}
           fieldNamePrefix="second"
           defaultValues={defaultFieldValue}
+          isDisabled={isDisabled}
         />
 
         <div className="w-full h-px bg-gray-200" />
@@ -185,6 +140,7 @@ export function ReportFormPage({
           products={PRODUCTS_GARNISH}
           fieldNamePrefix="garnish"
           defaultValues={defaultFieldValue}
+          isDisabled={isDisabled}
         />
 
         <div className="w-full h-px bg-gray-200" />
@@ -195,6 +151,7 @@ export function ReportFormPage({
           products={PRODUCTS_BUFFET}
           fieldNamePrefix="buffet"
           defaultValues={defaultFieldValue}
+          isDisabled={isDisabled}
         />
 
         <div className="w-full h-px bg-gray-200" />
@@ -205,10 +162,15 @@ export function ReportFormPage({
           products={PRODUCTS_SNACKS}
           fieldNamePrefix="deserts"
           defaultValues={defaultFieldValue}
+          isDisabled={isDisabled}
         />
       </div>
 
-      <Button type="submit" className="mt-8 px-8 py-2 h-10 font-semibold">
+      <Button
+        type="submit"
+        className="mt-8 px-8 py-2 h-10 font-semibold"
+        disabled={!form.formState.isValid || isDisabled}
+      >
         Отправить
       </Button>
     </FormInput>
