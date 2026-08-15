@@ -15,20 +15,20 @@ export function DayByMonthTable({
 
   const todayDay = new Date().getDate();
   return (
-    <TableHeader className="sticky top-0 bg-background z-20">
+    <TableHeader>
       <TableRow className="h-9">
-        <TableCell
-          colSpan={2}
-          className="p-0 px-1 front-bold text-center text-xs"
-        >
+        <TableCell className="p-0 px-1 front-bold text-center text-xs md:w-40 w-30 sticky left-0 bg-background">
           {month?.toLocaleLowerCase()}
+        </TableCell>
+        <TableCell className="md:w-16 w-10 p-0 border-l sticky md:left-40 left-29 bg-background">
+          <div className="text-xs text-center font-bold">total</div>
         </TableCell>
 
         {monthDays.map((day) => {
           return (
             <TableCell
               key={day.day}
-              className={cn("w-14 cursor-pointer p-0", className)}
+              className={cn("md:w-12 w-9 cursor-pointer p-0", className)}
             >
               <div
                 className={cn(

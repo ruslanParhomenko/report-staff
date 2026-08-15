@@ -22,7 +22,7 @@ export default function ReportMonthPage({
       </div>
     );
   return (
-    <Table>
+    <Table className="table-fixed">
       <DayByMonthTable month={month} monthDays={monthDays} />
       <ReportMonthBody data={data} monthDays={monthDays} />
     </Table>

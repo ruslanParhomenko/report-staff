@@ -33,26 +33,37 @@ export default function ReportMonthBody({ data, monthDays }: Props) {
   );
   return (
     <TableBody>
-      {uniqueNames.map((name) => (
-        <TableRow key={name} className="h-6">
-          <TableCell className="px-2 font-medium text-xs p-0">{name}</TableCell>
+      {uniqueNames.map((name) => {
+        const total = Object.values(productsByDay).reduce(
+          (acc, products) => acc + (products[name] ?? 0),
+          0,
+        );
 
-          <TableCell />
+        return (
+          <TableRow key={name} className="h-6">
+            <TableCell className="px-2 font-medium text-xs p-0 sticky left-0 bg-background truncate">
+              {name}
+            </TableCell>
 
-          {monthDays.map((dayObj) => {
-            const value = productsByDay[String(dayObj.day)]?.[name];
+            <TableCell className="text-center text-xs p-0 font-bold border-l sticky md:left-40 left-30 bg-background">
+              {total || ""}
+            </TableCell>
 
-            return (
-              <TableCell
-                key={`${name}-${dayObj.day}`}
-                className="text-center text-xs p-0 border-l"
-              >
-                {value ?? ""}
-              </TableCell>
-            );
-          })}
-        </TableRow>
-      ))}
+            {monthDays.map((dayObj) => {
+              const value = productsByDay[String(dayObj.day)]?.[name];
+
+              return (
+                <TableCell
+                  key={`${name}-${dayObj.day}`}
+                  className="text-center text-xs p-0 border-l"
+                >
+                  {value ?? ""}
+                </TableCell>
+              );
+            })}
+          </TableRow>
+        );
+      })}
     </TableBody>
   );
 }

@@ -33,7 +33,11 @@ export function ReportPage({
         <ReportMonthPage data={dataReportByMonth} month={month} year={year} />
       )}
       {tab === "day" && (
-        <ReportDayPage data={dataReportByMonth} month={month} year={year} />
+        <ReportDayPage
+          dataReportByMonth={dataReportByMonth}
+          month={month}
+          year={year}
+        />
       )}
       {tab === "year" && <ReportYearPage data={dataReportByYear} year={year} />}
     </div>

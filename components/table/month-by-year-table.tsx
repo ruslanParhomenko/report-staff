@@ -31,19 +31,22 @@ export function MonthByYearTable({
   const todayMonthIndex = now.getMonth();
 
   return (
-    <TableHeader className="sticky top-0 bg-background z-20">
+    <TableHeader>
       <TableRow className="h-9">
-        <TableCell className="p-0 px-1 font-bold text-center text-xs w-40">
+        <TableCell className="p-0 px-1 font-bold text-center text-xs md:w-40 w-30 sticky left-0 bg-background">
           {year}
         </TableCell>
 
+        <TableCell className="md:w-14 w-10 p-0 border-l sticky md:left-40 left-30 bg-background">
+          <div className="text-xs text-center font-bold">total</div>
+        </TableCell>
         {MONTHS.map((month, index) => {
           const isCurrent = isCurrentYear && index === todayMonthIndex;
 
           return (
             <TableCell
               key={month}
-              className={cn("w-12 cursor-pointer p-0", className)}
+              className={cn("md:w-14 w-9 cursor-pointer p-0", className)}
             >
               <div
                 className={cn(
@@ -56,10 +59,6 @@ export function MonthByYearTable({
             </TableCell>
           );
         })}
-
-        <TableCell className="w-16 p-0 border-l">
-          <div className="text-xs text-center font-bold">Итого</div>
-        </TableCell>
       </TableRow>
     </TableHeader>
   );

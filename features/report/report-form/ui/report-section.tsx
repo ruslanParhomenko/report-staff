@@ -35,12 +35,12 @@ export default function ReportSection({
                   <SelectInputWithSearch
                     data={products}
                     fieldName={`${fieldNamePrefix}.${index}.name`}
-                    className="w-80 shadow-none font-bold h-9 text-xl px-4"
+                    className="md:w-80 w-50 shadow-none font-bold h-9 md:text-xl px-4"
                     disabled={isDisabled}
                   />
                   <NumericInput
                     fieldName={`${fieldNamePrefix}.${index}.value`}
-                    className="shadow-none font-bold h-9 w-20 text-xl!"
+                    className="shadow-none font-bold h-9 md:w-20 w-15 md:text-xl!"
                     disabled={isDisabled}
                   />
                   <AddRemoveFieldsButton

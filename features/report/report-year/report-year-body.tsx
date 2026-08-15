@@ -47,8 +47,11 @@ export default function ReportYearBody({ data }: Props) {
 
         return (
           <TableRow key={name} className="h-6">
-            <TableCell className="px-2 font-medium text-xs p-0">
+            <TableCell className="px-2 font-medium text-xs p-0 sticky left-0 bg-background truncate">
               {name}
+            </TableCell>
+            <TableCell className="text-center text-xs p-0 font-bold border-l sticky md:left-40 left-30 bg-background">
+              {total || ""}
             </TableCell>
 
             {MONTHS.map((month) => {
@@ -63,10 +66,6 @@ export default function ReportYearBody({ data }: Props) {
                 </TableCell>
               );
             })}
-
-            <TableCell className="text-center text-xs p-0 font-bold border-l">
-              {total || ""}
-            </TableCell>
           </TableRow>
         );
       })}

@@ -20,8 +20,6 @@ export default function NavTabs<T extends string>({
 
   const tabsWidth = `w-1/${navItems.length}`;
 
-  let itemsWidth = "w-4";
-
   return (
     <Tabs
       value={activeTab}
@@ -41,8 +39,7 @@ export default function NavTabs<T extends string>({
           >
             <span
               className={cn(
-                "md:text-md  hover:text-rd block truncate text-xs md:min-w-22",
-                itemsWidth,
+                "md:text-md  hover:text-rd block truncate text-xs md:min-w-22 w-10",
                 item === activeTab ? "text-red-600" : "",
               )}
             >

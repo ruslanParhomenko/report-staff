@@ -7,47 +7,51 @@ import { useState, useTransition } from "react";
 import ReportTable from "./report-day-table";
 import { useRouter } from "next/navigation";
 import RefreshDataButton from "@/components/buttons/refresh-data";
+import { revalidateTagClient } from "@/app/action/revalidate-tag/revalidate-tag";
+import { REPORT_STAFF_ACTION_TAG } from "@/constants/action-tag";
+import { useSession } from "next-auth/react";
+import { formatNow } from "@/utils/format-date";
 
 export default function ReportDayPage({
-  data,
+  dataReportByMonth,
   month,
   year,
 }: {
-  data: GetReportData[] | null;
+  dataReportByMonth: GetReportData[] | null;
   month: string;
   year: string;
 }) {
   const monthDays = getMonthDays({ month, year });
 
+  const { data } = useSession();
+
+  const isAdmin = data?.user?.role === "admin";
+
   const router = useRouter();
   const [_isPending, startTransition] = useTransition();
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const [selectedDay, setSelectedDay] = useState<string>(
-    new Date().getDate().toString(),
-  );
+  const { reportDay } = formatNow();
 
-  const selectedDayData = data?.find((day) => day.id === selectedDay) || null;
+  const [selectedDay, setSelectedDay] = useState<string>(reportDay);
+
+  const selectedDayData =
+    dataReportByMonth?.find((day) => day.id === selectedDay) || null;
 
   const handleRefresh = () => {
     if (isRefreshing) return;
 
     setIsRefreshing(true);
-
-    const startTime = Date.now();
-
     setSelectedDay(new Date().getDate().toString());
 
-    startTransition(() => {
+    startTransition(async () => {
+      if (isAdmin) {
+        await revalidateTagClient(REPORT_STAFF_ACTION_TAG);
+      }
       router.refresh();
     });
 
-    const elapsed = Date.now() - startTime;
-    const remaining = Math.max(2000 - elapsed, 0);
-
-    setTimeout(() => {
-      setIsRefreshing(false);
-    }, remaining);
+    setTimeout(() => setIsRefreshing(false), 1000);
   };
 
   return (

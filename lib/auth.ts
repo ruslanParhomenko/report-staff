@@ -30,6 +30,7 @@ export const authOptions: NextAuthOptions = {
         const dbUser = users.find((u) => u.mail === profile.email);
 
         token.role = dbUser?.role ?? "OBSERVER";
+        token.accessList = dbUser?.accessList ?? [];
       }
       return token;
     },

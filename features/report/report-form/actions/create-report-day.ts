@@ -4,7 +4,6 @@ import { REPORT_STAFF_ACTION_TAG } from "@/constants/action-tag";
 import { updateTag } from "next/cache";
 import { ReportFormData } from "../model/type";
 import { getYearMonthDoc } from "@/lib/firebase-doc";
-import { invalidateEverywhere } from "@/app/action/invalidate-everywhere";
 
 const actionTag = REPORT_STAFF_ACTION_TAG;
 

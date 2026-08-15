@@ -2,7 +2,7 @@ import { getToken } from "next-auth/jwt";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
-const SET_ACCESS = ["ADMIN", "SCR", "CUCINA"];
+const ROUTE_ACCESS = "report-staff";
 
 export async function proxy(request: NextRequest) {
   const url = request.nextUrl.clone();
@@ -19,12 +19,12 @@ export async function proxy(request: NextRequest) {
   if (!token) {
     return NextResponse.redirect(new URL("/", request.url));
   }
+  const allowedRoutes = token.accessList || [];
 
   const isAdmin = token.role === "ADMIN";
 
-  const role = token.role;
-
-  const accessGranted = role === "ADMIN" || SET_ACCESS.includes(role as string);
+  const accessGranted =
+    token.role === "ADMIN" || allowedRoutes.includes(ROUTE_ACCESS);
 
   if (!accessGranted) {
     return NextResponse.redirect(new URL("/no-access", request.url));

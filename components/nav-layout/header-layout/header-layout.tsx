@@ -103,12 +103,12 @@ export default function HeaderBar() {
   };
 
   const selectClassName =
-    "md:w-24 w-10 h-6! md:border-border/30 px-1 rounded-md md:text-md text-xs bg-border/30";
+    "md:w-24 w-12 h-6! md:border-border/30 px-1 rounded-md md:text-md text-xs bg-border/30";
 
   return (
     <div
       className={cn(
-        "bg-background sticky top-0 z-10 flex items-center justify-center gap-1 py-2 md:flex-row md:justify-between md:gap-2 md:px-4",
+        "bg-background sticky top-0 z-10 flex items-center  gap-1 py-2 md:flex-row justify-between md:gap-2 md:px-4",
         navItems.length < 9 ? "flex-row" : "flex-col",
       )}
     >
@@ -117,8 +117,8 @@ export default function HeaderBar() {
         activeTab={activeTab}
         handleTabChange={handleTabChange}
         disabled={isPending}
-        classTrigger="h-6"
-        classTabs="h-7!"
+        classTrigger="h-5.5 md:h-6"
+        classTabs="h-6! md:h-7!"
       />
 
       {selectDate && (

@@ -74,25 +74,25 @@ export default function ReportTable({
     <Table className="border-b table-fixed">
       <TableHeader>
         <TableRow>
-          <TableHead className="sticky left-0 z-10 w-50  bg-background" />
+          <TableHead className="sticky left-0 z-10 md:w-50 w-30 truncate  bg-background" />
 
           {timeColumns.map((column) => (
             <TableHead
               key={column.timeMs}
-              className="w-25  text-center text-xs text-red-600"
+              className="text-center text-xs text-red-600"
             >
-              {column.time}
+              {column.time.slice(0, 5)}
             </TableHead>
           ))}
 
-          <TableHead className="w-25 text-center">всего</TableHead>
+          <TableHead className="md:w-25 w-15 text-center">total</TableHead>
         </TableRow>
       </TableHeader>
 
       <TableBody>
         {products.map((product) => (
           <TableRow key={product.name}>
-            <TableCell className="sticky left-0 z-10 bg-background font-medium">
+            <TableCell className="sticky left-0 z-10 bg-background font-medium truncate">
               {product.name}
             </TableCell>
 
