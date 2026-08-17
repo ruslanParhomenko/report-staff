@@ -14,7 +14,7 @@ export default function FooterBar() {
   return (
     <div
       className={cn(
-        "bg-background sticky bottom-0 z-10 flex items-center gap-1 py-2 md:flex-row justify-between md:gap-2 md:px-4 w-full",
+        "bg-background sticky bottom-0 z-10 flex items-center gap-1 py-2 md:flex-row justify-between md:gap-2 px-4 w-full",
       )}
     >
       <LogOutButton />

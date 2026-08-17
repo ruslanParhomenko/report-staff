@@ -93,7 +93,7 @@ export default function ReportTable({
       <TableBody>
         {products.map((product) => (
           <TableRow key={product.name} className="group">
-            <TableCell className="sticky left-0 z-10 w-30 md:w-50 bg-background font-medium truncate md:bg-transparent group-hover:text-red-600">
+            <TableCell className="sticky left-0 z-10 w-20 md:w-50 text-xs md:text-md  bg-background font-medium truncate md:bg-transparent group-hover:text-red-600">
               {product.name}
             </TableCell>
 
