@@ -137,7 +137,7 @@ export function ReportFormPage({
         <div className="w-full h-px bg-gray-200" />
 
         <ReportSection
-          title="Фуршет"
+          title="Фуршет в порции"
           fieldArray={buffetArray}
           products={PRODUCTS_BUFFET}
           fieldNamePrefix="buffet"
