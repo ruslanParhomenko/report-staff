@@ -1,13 +1,23 @@
 import { TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { getMonthDays } from "@/utils/get-month-days";
 import { GetReportData } from "../report-form/model/type";
+import { useReportNavigation } from "@/hook/use-report-navigation";
 
 type Props = {
   data: GetReportData[];
   monthDays: ReturnType<typeof getMonthDays>;
+  month: string;
+  year: string;
 };
 
-export default function ReportMonthBody({ data, monthDays }: Props) {
+export default function ReportMonthBody({
+  data,
+  monthDays,
+  month,
+  year,
+}: Props) {
+  const { handleClick } = useReportNavigation();
+
   const productsByDay: Record<string, Record<string, number>> = {};
 
   data.forEach((day) => {
@@ -31,6 +41,7 @@ export default function ReportMonthBody({ data, monthDays }: Props) {
       Object.values(productsByDay).flatMap((products) => Object.keys(products)),
     ),
   );
+
   return (
     <TableBody>
       {uniqueNames.map((name) => {
@@ -40,22 +51,25 @@ export default function ReportMonthBody({ data, monthDays }: Props) {
         );
 
         return (
-          <TableRow key={name} className="h-6">
-            <TableCell className="px-2 font-medium text-xs p-0 sticky left-0 bg-background truncate">
+          <TableRow key={name} className="h-6 group">
+            <TableCell className="px-2 font-medium text-xs p-0 sticky left-0 bg-background truncate group-hover:text-red-600 md:bg-transparent">
               {name}
             </TableCell>
 
-            <TableCell className="text-center text-xs p-0 font-bold border-l sticky md:left-40 left-30 bg-background">
+            <TableCell className="text-center text-xs p-0 font-bold border-l sticky md:left-40 left-30 bg-background md:bg-transparent group-hover:text-red-600">
               {total || ""}
             </TableCell>
 
             {monthDays.map((dayObj) => {
               const value = productsByDay[String(dayObj.day)]?.[name];
 
+              const day = dayObj.day.toString();
+
               return (
                 <TableCell
                   key={`${name}-${dayObj.day}`}
-                  className="text-center text-xs p-0 border-l"
+                  className="text-center text-xs p-0 border-l cursor-pointer group-hover:text-red-600 hover:text-green-600!"
+                  onClick={() => handleClick("day", day, month, year)}
                 >
                   {value ?? ""}
                 </TableCell>

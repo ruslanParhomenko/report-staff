@@ -35,11 +35,11 @@ export default async function RootLayout({
         <SessionProviders>
           <Toaster position="top-center" />
 
-          <div className="flex flex-col px-4 justify-between h-dvh">
+          <div className="flex flex-col justify-between h-dvh w-dvw">
             <Suspense fallback={null}>
               <HeaderBar />
             </Suspense>
-            <div className="flex-1">{children}</div>
+            <div className="flex-1 md:px-4">{children}</div>
             <FooterBar />
           </div>
         </SessionProviders>

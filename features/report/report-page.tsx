@@ -8,6 +8,7 @@ import { useSearchParams } from "next/navigation";
 import { GetReportData } from "./report-form/model/type";
 import ReportDayPage from "./report-day/report-day-page";
 import ReportYearPage from "./report-year/report-year-page";
+import ReportRefreshBar from "./report-refresh-bar/report-refresh-bar";
 
 export function ReportPage({
   dataProducts,
@@ -25,20 +26,17 @@ export function ReportPage({
   isAdmin: boolean;
 }) {
   const tab = useSearchParams().get("tab");
-  return (
-    <div className="mt-6">
-      {tab === "form" && <ReportFormPage dataProducts={dataProducts} />}
+  const showRefresh = tab && tab !== "form";
 
+  return (
+    <div className="space-y-4">
+      {showRefresh && <ReportRefreshBar isAdmin={isAdmin} />}
+
+      {tab === "form" && <ReportFormPage dataProducts={dataProducts} />}
       {tab === "month" && (
         <ReportMonthPage data={dataReportByMonth} month={month} year={year} />
       )}
-      {tab === "day" && (
-        <ReportDayPage
-          dataReportByMonth={dataReportByMonth}
-          month={month}
-          year={year}
-        />
-      )}
+      {tab === "day" && <ReportDayPage dataReportByMonth={dataReportByMonth} />}
       {tab === "year" && <ReportYearPage data={dataReportByYear} year={year} />}
     </div>
   );

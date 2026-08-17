@@ -1,13 +1,15 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { MONTHS, YEAR } from "@/utils/get-month-days";
+import { getMonthDays, MONTHS, YEAR } from "@/utils/get-month-days";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useEffectEvent, useState, useTransition } from "react";
 import { NAV_BY_PATCH } from "./constants";
 import NavTabs from "@/components/nav-tabs/nav-tabs";
 import SelectOptions from "@/components/input/select-options";
 import { useSession } from "next-auth/react";
+import { formatNow } from "@/utils/format-date";
+import SelectDay from "@/components/input/select-day";
 
 export default function HeaderBar() {
   const pathname = usePathname();
@@ -15,100 +17,91 @@ export default function HeaderBar() {
   const searchParams = useSearchParams();
 
   const { data } = useSession();
-
   const userRole = data?.user?.role;
 
   const router = useRouter();
-
   const [isPending, startTransition] = useTransition();
-
-  const STORAGE_KEY = `nav-tab-${pathname}`;
 
   const config = NAV_BY_PATCH[mainRoute as keyof typeof NAV_BY_PATCH];
 
   const selectMonth = config?.selectMonth;
   const selectYear = config?.selectYear;
-
   const selectDate = selectMonth || selectYear;
 
   const navItems: readonly string[] = config?.tabs ?? [];
 
-  const defaultTab = userRole === "cucina" ? "form" : navItems[0] || "";
-
+  const defaultTab = userRole === "cucina" ? "form" : "day";
   const activeTab = searchParams.get("tab") || defaultTab;
 
   const urlMonth = searchParams.get("month");
   const urlYear = searchParams.get("year");
+  const urlDay = searchParams.get("day");
 
-  const [month, setMonth] = useState(
-    () => urlMonth || MONTHS[new Date().getMonth()],
-  );
-  const [year, setYear] = useState(
-    () => urlYear || new Date().getFullYear().toString(),
-  );
+  const { reportDay, month: reportMonth, year: reportYear } = formatNow();
+
+  const [day, setDay] = useState(() => urlDay || reportDay);
+  const [month, setMonth] = useState(() => urlMonth || reportMonth);
+  const [year, setYear] = useState(() => urlYear || reportYear);
 
   useEffect(() => {
     if (!selectDate) return;
-    setMonth(urlMonth || MONTHS[new Date().getMonth()]);
-    setYear(urlYear || new Date().getFullYear().toString());
-  }, [pathname]);
+    setDay(urlDay || reportDay);
+    setMonth(urlMonth || reportMonth);
+    setYear(urlYear || reportYear);
+  }, [
+    pathname,
+    urlDay,
+    urlMonth,
+    urlYear,
+    selectDate,
+    reportDay,
+    reportMonth,
+    reportYear,
+  ]);
 
-  const onSyncParams = useEffectEvent(
-    (items: readonly string[], m: string, y: string, withDate: boolean) => {
-      const params = new URLSearchParams(searchParams.toString());
+  const onSyncParams = useEffectEvent((d: string, m: string, y: string) => {
+    const params = new URLSearchParams(searchParams.toString());
 
-      const hasItems = items.length > 0;
-      let resolvedTab: string | undefined;
+    const currentDay = params.get("day");
+    const currentMonth = params.get("month");
+    const currentYear = params.get("year");
 
-      if (hasItems) {
-        const saved = localStorage.getItem(STORAGE_KEY);
-        resolvedTab = saved && items.includes(saved) ? saved : items[0];
-      }
+    const dateSynced =
+      currentDay === d && currentMonth === m && currentYear === y;
 
-      const currentTab = params.get("tab");
-      const currentMonth = params.get("month");
-      const currentYear = params.get("year");
+    if (dateSynced) return;
 
-      const tabSynced = !hasItems || currentTab === resolvedTab;
-      const dateSynced = !withDate || (currentMonth === m && currentYear === y);
+    params.set("day", d);
+    params.set("month", m);
+    params.set("year", y);
 
-      if (tabSynced && dateSynced) return;
-
-      if (hasItems && resolvedTab) {
-        params.set("tab", resolvedTab);
-      }
-
-      if (withDate) {
-        params.set("month", m);
-        params.set("year", y);
-      }
-
-      startTransition(() => {
-        router.replace(`${pathname}?${params.toString()}`, { scroll: false });
-      });
-    },
-  );
+    startTransition(() => {
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    });
+  });
 
   useEffect(() => {
-    onSyncParams(navItems, month, year, !!selectDate);
-  }, [STORAGE_KEY, navItems, month, year, selectDate, pathname]);
+    if (!selectDate) return;
+    onSyncParams(day, month, year);
+  }, [day, month, year, selectDate]);
 
   const handleTabChange = (value: string) => {
-    localStorage.setItem(STORAGE_KEY, value);
-
     const params = new URLSearchParams(searchParams.toString());
     params.set("tab", value);
-
-    window.history.replaceState(null, "", `${pathname}?${params.toString()}`);
+    startTransition(() => {
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    });
   };
 
+  const monthDays = getMonthDays({ month, year });
+
   const selectClassName =
-    "md:w-24 w-12 h-6! md:border-border/30 px-1 rounded-md md:text-md text-xs bg-border/30";
+    "md:w-24 w-10 h-6! md:border-border/30 px-1 rounded-md md:text-md text-xs bg-border/30";
 
   return (
     <div
       className={cn(
-        "bg-background sticky top-0 z-10 flex items-center  gap-1 py-2 md:flex-row justify-between md:gap-2 md:px-4",
+        "bg-background sticky top-0 z-10 flex items-center gap-1 py-3 md:flex-row justify-between md:gap-2 md:px-4",
         navItems.length < 9 ? "flex-row" : "flex-col",
       )}
     >
@@ -122,9 +115,15 @@ export default function HeaderBar() {
       />
 
       {selectDate && (
-        <div className="flex justify-center gap-2 md:justify-end">
+        <div className="flex justify-center md:gap-4 gap-2 md:justify-end">
+          <SelectDay
+            value={day}
+            onChange={setDay}
+            monthDays={monthDays}
+            className={selectClassName}
+          />
           <SelectOptions
-            options={MONTHS.map((month, index) => ({
+            options={MONTHS.map((month) => ({
               value: month,
               label: month,
             }))}

@@ -20,11 +20,10 @@ export default function SelectDay({
     <Select open={open} onOpenChange={setOpen}>
       <SelectTrigger
         className={cn(
-          "bg-background! h-6!  w-20 justify-center items-center border-0 shadow-none [&>svg]:hidden cursor-pointer",
+          "bg-background justify-center border-0 shadow-none [&>svg]:hidden text-red-600!",
           className,
         )}
       >
-        <span className="text-xs text-muted-foreground">выбрать день:</span>
         {value}
       </SelectTrigger>
 
@@ -44,7 +43,7 @@ export default function SelectDay({
                 type="button"
                 value={String(day)}
                 className={cn(
-                  "h-7 w-7 rounded-md text-sm transition",
+                  "h-8 w-8 rounded-md text-sm transition cursor-pointer",
 
                   isSelected
                     ? "bg-primary text-primary-foreground"

@@ -14,9 +14,8 @@ export default async function Page({
   const headerStore = await headers();
   const isAdmin = headerStore.get("x-is-admin") === "true";
 
-  const { month, tab } = await searchParams;
-  if (!month || !tab) return null;
-  const year = new Date().getFullYear().toString();
+  const { month, tab, year } = await searchParams;
+  if (!month || !tab || !year) return null;
 
   const dataProducts = await getDataProducts();
   const dataReportByMonth = await getReportsByMonth(year, month);

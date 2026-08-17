@@ -9,6 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { GetReportData } from "../report-form/model/type";
+import { cn } from "@/lib/utils";
 
 type ProductRow = {
   name: string;
@@ -71,38 +72,47 @@ export default function ReportTable({
   );
 
   return (
-    <Table className="border-b table-fixed">
+    <Table className="border-b">
       <TableHeader>
         <TableRow>
-          <TableHead className="sticky left-0 z-10 md:w-50 w-30 truncate  bg-background" />
+          <TableHead className="sticky left-0 z-10 w-30 md:w-50 truncate bg-background" />
 
           {timeColumns.map((column) => (
             <TableHead
               key={column.timeMs}
-              className="text-center text-xs text-red-600"
+              className="min-w-12 text-center text-xs text-red-600"
             >
               {column.time.slice(0, 5)}
             </TableHead>
           ))}
 
-          <TableHead className="md:w-25 w-15 text-center">total</TableHead>
+          <TableHead className="w-15 md:w-25 text-center">total</TableHead>
         </TableRow>
       </TableHeader>
 
       <TableBody>
         {products.map((product) => (
-          <TableRow key={product.name}>
-            <TableCell className="sticky left-0 z-10 bg-background font-medium truncate">
+          <TableRow key={product.name} className="group">
+            <TableCell className="sticky left-0 z-10 w-30 md:w-50 bg-background font-medium truncate md:bg-transparent group-hover:text-red-600">
               {product.name}
             </TableCell>
 
-            {timeColumns.map((column) => (
-              <TableCell key={column.timeMs} className="text-center border-l">
-                {product.values[column.timeMs] ?? ""}
-              </TableCell>
-            ))}
+            {timeColumns.map((column) => {
+              const isValue = Boolean(product.values[column.timeMs]);
+              return (
+                <TableCell
+                  key={column.timeMs}
+                  className={cn(
+                    "min-w-12 text-center border-l group-hover:text-red-600",
+                    isValue && "bg-accent",
+                  )}
+                >
+                  {product.values[column.timeMs] ?? ""}
+                </TableCell>
+              );
+            })}
 
-            <TableCell className="text-center font-semibold border-l">
+            <TableCell className="w-15 md:w-25 text-center font-semibold border-l">
               {product.total}
             </TableCell>
           </TableRow>

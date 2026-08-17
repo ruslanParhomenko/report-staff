@@ -24,7 +24,12 @@ export default function ReportMonthPage({
   return (
     <Table className="table-fixed">
       <DayByMonthTable month={month} monthDays={monthDays} />
-      <ReportMonthBody data={data} monthDays={monthDays} />
+      <ReportMonthBody
+        data={data}
+        monthDays={monthDays}
+        month={month}
+        year={year}
+      />
     </Table>
   );
 }

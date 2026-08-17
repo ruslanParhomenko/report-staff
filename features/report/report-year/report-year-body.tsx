@@ -2,11 +2,15 @@ import { TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { MONTHS } from "@/utils/get-month-days";
 import { GetReportData } from "../report-form/model/type";
 
+import { useReportNavigation } from "@/hook/use-report-navigation";
+
 type Props = {
   data: GetReportData[];
 };
 
 export default function ReportYearBody({ data }: Props) {
+  const { handleClick } = useReportNavigation();
+
   const productsByMonth: Record<string, Record<string, number>> = {};
 
   MONTHS.forEach((month) => {
@@ -46,11 +50,11 @@ export default function ReportYearBody({ data }: Props) {
         );
 
         return (
-          <TableRow key={name} className="h-6">
-            <TableCell className="px-2 font-medium text-xs p-0 sticky left-0 bg-background truncate">
+          <TableRow key={name} className="h-6 group">
+            <TableCell className="px-2 font-medium text-xs p-0 sticky left-0 bg-background truncate md:bg-transparent group-hover:text-red-600">
               {name}
             </TableCell>
-            <TableCell className="text-center text-xs p-0 font-bold border-l sticky md:left-40 left-30 bg-background">
+            <TableCell className="text-center text-xs p-0 font-bold border-l sticky md:left-40 left-30 bg-background md:bg-transparent group-hover:text-red-600">
               {total || ""}
             </TableCell>
 
@@ -60,7 +64,8 @@ export default function ReportYearBody({ data }: Props) {
               return (
                 <TableCell
                   key={`${name}-${month}`}
-                  className="text-center text-xs p-0 border-l"
+                  className="text-center text-xs p-0 border-l group-hover:text-red-600 cursor-pointer"
+                  onClick={() => handleClick("month", undefined, month)}
                 >
                   {value ?? ""}
                 </TableCell>
