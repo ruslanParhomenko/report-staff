@@ -9,6 +9,8 @@ export default function FooterBar() {
   const { data } = useSession();
 
   const userRole = data?.user?.role;
+
+  if (!userRole) return null;
   return (
     <div
       className={cn(

@@ -43,6 +43,18 @@ export default function HeaderBar() {
   const [month, setMonth] = useState(() => urlMonth || reportMonth);
   const [year, setYear] = useState(() => urlYear || reportYear);
 
+  // Синхронизируем activeTab в URL при старте приложения
+  useEffect(() => {
+    const hasTab = searchParams.has("tab");
+    if (!hasTab) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("tab", defaultTab);
+      startTransition(() => {
+        router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+      });
+    }
+  }, [defaultTab, searchParams, pathname, router]);
+
   useEffect(() => {
     if (!selectDate) return;
     setDay(urlDay || reportDay);
@@ -59,31 +71,33 @@ export default function HeaderBar() {
     reportYear,
   ]);
 
-  const onSyncParams = useEffectEvent((d: string, m: string, y: string) => {
-    const params = new URLSearchParams(searchParams.toString());
+  const onSyncParams = useEffectEvent(
+    (tab: string, d: string, m: string, y: string) => {
+      const params = new URLSearchParams(searchParams.toString());
 
-    const currentDay = params.get("day");
-    const currentMonth = params.get("month");
-    const currentYear = params.get("year");
+      const currentDay = params.get("day");
+      const currentMonth = params.get("month");
+      const currentYear = params.get("year");
 
-    const dateSynced =
-      currentDay === d && currentMonth === m && currentYear === y;
+      const dateSynced =
+        currentDay === d && currentMonth === m && currentYear === y;
 
-    if (dateSynced) return;
+      if (dateSynced) return;
 
-    params.set("day", d);
-    params.set("month", m);
-    params.set("year", y);
+      params.set("day", d);
+      params.set("month", m);
+      params.set("year", y);
 
-    startTransition(() => {
-      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
-    });
-  });
+      startTransition(() => {
+        router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+      });
+    },
+  );
 
   useEffect(() => {
     if (!selectDate) return;
-    onSyncParams(day, month, year);
-  }, [day, month, year, selectDate]);
+    onSyncParams(activeTab, day, month, year);
+  }, [day, month, year, selectDate, activeTab]);
 
   const handleTabChange = (value: string) => {
     const params = new URLSearchParams(searchParams.toString());
