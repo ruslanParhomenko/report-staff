@@ -29,30 +29,32 @@ export default function ReportSection({
       <div className="flex justify-center">
         <Table className="w-auto">
           <TableBody>
-            {fieldArray.fields.map((field: any, index: number) => (
-              <TableRow key={field.id} className="border-0">
-                <TableCell className="flex gap-4 items-center justify-center py-0.5 px-4">
-                  <SelectInputWithSearch
-                    data={products}
-                    fieldName={`${fieldNamePrefix}.${index}.name`}
-                    className="md:w-80 w-50 shadow-none font-bold h-9 md:text-xl px-4"
-                    disabled={isDisabled}
-                  />
-                  <NumericInput
-                    fieldName={`${fieldNamePrefix}.${index}.value`}
-                    className="shadow-none font-bold h-9 md:w-20 w-15 md:text-xl!"
-                    disabled={isDisabled}
-                  />
-                  <AddRemoveFieldsButton
-                    formField={fieldArray}
-                    defaultValues={defaultValues}
-                    index={index}
-                    limit={2}
-                    disabled={isDisabled}
-                  />
-                </TableCell>
-              </TableRow>
-            ))}
+            {fieldArray.fields.map((field: any, index: number) => {
+              return (
+                <TableRow key={field.id} className="border-0">
+                  <TableCell className="flex gap-4 items-center justify-center py-0.5 px-4">
+                    <SelectInputWithSearch
+                      data={products}
+                      fieldName={`${fieldNamePrefix}.${index}.name`}
+                      className="md:w-80 w-50 shadow-none font-bold h-9 md:text-xl px-4"
+                      disabled={isDisabled}
+                    />
+                    <NumericInput
+                      fieldName={`${fieldNamePrefix}.${index}.value`}
+                      className="shadow-none font-bold h-9 md:w-20 w-15 md:text-xl!"
+                      disabled={isDisabled}
+                    />
+                    <AddRemoveFieldsButton
+                      formField={fieldArray}
+                      defaultValues={defaultValues}
+                      index={index}
+                      limit={2}
+                      disabled={isDisabled}
+                    />
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </div>

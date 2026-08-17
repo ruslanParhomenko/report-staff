@@ -10,6 +10,7 @@ import { formatNow } from "@/utils/format-date";
 export default function ReportRefreshBar({ isAdmin }: { isAdmin: boolean }) {
   const router = useRouter();
   const searchParams = useSearchParams();
+
   const [_isPending, startTransition] = useTransition();
   const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -29,6 +30,7 @@ export default function ReportRefreshBar({ isAdmin }: { isAdmin: boolean }) {
     startTransition(async () => {
       if (isAdmin) {
         await revalidateTagClient(REPORT_STAFF_ACTION_TAG);
+        await revalidateTagClient("data-products");
       }
       router.refresh();
     });
