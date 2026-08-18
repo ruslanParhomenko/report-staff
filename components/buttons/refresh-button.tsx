@@ -7,7 +7,7 @@ import { revalidateTagClient } from "@/app/action/revalidate-tag/revalidate-tag"
 import { REPORT_STAFF_ACTION_TAG } from "@/constants/action-tag";
 import { formatNow } from "@/utils/format-date";
 
-export default function ReportRefreshBar({ isAdmin }: { isAdmin: boolean }) {
+export default function RefreshButton({ isAdmin }: { isAdmin: boolean }) {
   const router = useRouter();
   const searchParams = useSearchParams();
 

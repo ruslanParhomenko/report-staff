@@ -1,22 +1,18 @@
 import { Table } from "@/components/ui/table";
 
-import { GetReportData } from "../report-form/model/type";
+import { GetReportData } from "../../report-form/model/type";
 import { MonthByYearTable } from "@/components/table/month-by-year-table";
 import ReportYearBody from "./report-year-body";
+import NoProducts from "@/components/pages/no-products";
 
-export default function ReportYearPage({
-  data,
+export function ReportYearPage({
+  dataReportByYear: data,
   year,
 }: {
-  data: GetReportData[] | null;
+  dataReportByYear: GetReportData[];
   year: string;
 }) {
-  if (!data)
-    return (
-      <div className="text-center text-red-600 font-bold my-6">
-        нет выданных продуктов
-      </div>
-    );
+  if (!data) return <NoProducts />;
 
   return (
     <Table className="table-fixed">

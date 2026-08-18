@@ -1,7 +1,9 @@
+"use client";
 import { TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { getMonthDays } from "@/utils/get-month-days";
-import { GetReportData } from "../report-form/model/type";
+
 import { useReportNavigation } from "@/hook/use-report-navigation";
+import { GetReportData } from "@/features/report-form/model/type";
 
 type Props = {
   data: GetReportData[];
@@ -51,7 +53,7 @@ export default function ReportMonthBody({
         );
 
         return (
-          <TableRow key={name} className="h-6 group">
+          <TableRow key={name} className="h-5 group">
             <TableCell className="px-2 font-medium text-xs p-0 sticky left-0 bg-background truncate group-hover:text-red-600 md:bg-transparent">
               {name}
             </TableCell>

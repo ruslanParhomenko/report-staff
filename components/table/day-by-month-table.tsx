@@ -16,7 +16,7 @@ export function DayByMonthTable({
   const todayDay = new Date().getDate();
   return (
     <TableHeader>
-      <TableRow className="h-9">
+      <TableRow>
         <TableCell className="p-0 px-1 front-bold text-center text-xs md:w-40 w-30 sticky left-0 bg-background">
           {month?.toLocaleLowerCase()}
         </TableCell>

@@ -1,8 +1,9 @@
+"use client";
 import { TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { MONTHS } from "@/utils/get-month-days";
-import { GetReportData } from "../report-form/model/type";
 
 import { useReportNavigation } from "@/hook/use-report-navigation";
+import { GetReportData } from "@/features/report-form/model/type";
 
 type Props = {
   data: GetReportData[];
@@ -50,12 +51,12 @@ export default function ReportYearBody({ data }: Props) {
         );
 
         return (
-          <TableRow key={name} className="h-6 group">
-            <TableCell className="px-2 font-medium text-xs p-0 sticky left-0 bg-background truncate md:bg-transparent group-hover:text-red-600">
+          <TableRow key={name} className="h-5 group">
+            <TableCell className="px-2 text-xs p-0 sticky left-0 bg-background truncate md:bg-transparent group-hover:text-red-600">
               {name}
             </TableCell>
             <TableCell className="text-center text-xs p-0 font-bold border-l sticky md:left-40 left-30 bg-background md:bg-transparent group-hover:text-red-600">
-              {total || ""}
+              {total.toFixed(0) || ""}
             </TableCell>
 
             {MONTHS.map((month) => {
@@ -67,7 +68,7 @@ export default function ReportYearBody({ data }: Props) {
                   className="text-center text-xs p-0 border-l group-hover:text-red-600 cursor-pointer"
                   onClick={() => handleClick("month", undefined, month)}
                 >
-                  {value ?? ""}
+                  {value?.toFixed(0) ?? ""}
                 </TableCell>
               );
             })}

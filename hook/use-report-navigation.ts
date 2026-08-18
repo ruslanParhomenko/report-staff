@@ -1,3 +1,4 @@
+"use client";
 import { useRouter } from "next/navigation";
 import { formatNow } from "@/utils/format-date";
 

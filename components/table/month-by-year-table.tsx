@@ -2,21 +2,6 @@ import { TableCell, TableHeader, TableRow } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import { MONTHS } from "@/utils/get-month-days";
 
-const MONTH_LABELS: Record<string, string> = {
-  january: "январь",
-  february: "февраль",
-  march: "март",
-  april: "апрель",
-  may: "май",
-  june: "июнь",
-  july: "июль",
-  august: "август",
-  september: "сентябрь",
-  october: "октябрь",
-  november: "ноябрь",
-  december: "декабрь",
-};
-
 export function MonthByYearTable({
   year,
   className,
@@ -32,7 +17,7 @@ export function MonthByYearTable({
 
   return (
     <TableHeader>
-      <TableRow className="h-9">
+      <TableRow>
         <TableCell className="p-0 px-1 font-bold text-center text-xs md:w-40 w-30 sticky left-0 bg-background">
           {year}
         </TableCell>
@@ -54,7 +39,7 @@ export function MonthByYearTable({
                   isCurrent && "text-red-600",
                 )}
               >
-                {MONTH_LABELS[month].slice(0, 3)}
+                {month.slice(0, 3)}
               </div>
             </TableCell>
           );

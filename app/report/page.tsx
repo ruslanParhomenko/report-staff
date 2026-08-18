@@ -3,8 +3,9 @@ import { getDataProducts } from "../action/data-products/get-data-products";
 import {
   getReportsByMonth,
   getReportsByYear,
-} from "@/features/report/report-form/actions/get-report";
+} from "@/features/report-form/actions/get-report";
 import { ReportPage } from "@/features/report";
+import { ParamsUrl } from "@/types/params-url";
 
 export default async function Page({
   searchParams,
@@ -14,20 +15,29 @@ export default async function Page({
   const headerStore = await headers();
   const isAdmin = headerStore.get("x-is-admin") === "true";
 
-  const { month, tab, year } = await searchParams;
+  const params = await searchParams;
+  const { month, tab, year } = params;
   if (!month || !tab || !year) return null;
 
-  const dataProducts = await getDataProducts();
-  const dataReportByMonth = await getReportsByMonth(year, month);
-  const dataReportByYear = await getReportsByYear(year);
+  let data;
+  switch (tab) {
+    case "form":
+      data = await getDataProducts();
+      break;
+    case "month":
+      data = await getReportsByMonth(year, month);
+      break;
+    case "day":
+      data = await getReportsByMonth(year, month);
+      break;
+    case "year":
+      data = await getReportsByYear(year);
+      break;
+    default:
+      data = null;
+  }
+
   return (
-    <ReportPage
-      dataProducts={dataProducts}
-      dataReportByMonth={dataReportByMonth}
-      dataReportByYear={dataReportByYear}
-      month={month}
-      year={year}
-      isAdmin={isAdmin}
-    />
+    <ReportPage params={params as ParamsUrl} data={data} isAdmin={isAdmin} />
   );
 }

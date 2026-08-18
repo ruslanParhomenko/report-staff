@@ -2,25 +2,21 @@ import { DayByMonthTable } from "@/components/table/day-by-month-table";
 import { Table } from "@/components/ui/table";
 import { getMonthDays } from "@/utils/get-month-days";
 import ReportMonthBody from "./report-month-body";
-import { GetReportData } from "../report-form/model/type";
+import { GetReportData } from "@/features/report-form/model/type";
+import NoProducts from "@/components/pages/no-products";
 
-export default function ReportMonthPage({
-  data,
+export function ReportMonthPage({
+  dataReportByMonth: data,
   month,
   year,
 }: {
-  data: GetReportData[] | null;
+  dataReportByMonth: GetReportData[] | null;
   month: string;
   year: string;
 }) {
   const monthDays = getMonthDays({ month, year });
 
-  if (!data)
-    return (
-      <div className="text-center text-red-600 font-bold my-6">
-        нет выданных продуктов
-      </div>
-    );
+  if (!data) return <NoProducts />;
   return (
     <Table className="table-fixed">
       <DayByMonthTable month={month} monthDays={monthDays} />

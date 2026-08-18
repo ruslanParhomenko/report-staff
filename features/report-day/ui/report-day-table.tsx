@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { GetReportData } from "../report-form/model/type";
+import { GetReportData } from "@/features/report-form/model/type";
 import { cn } from "@/lib/utils";
 
 type ProductRow = {
@@ -20,19 +20,11 @@ type ProductRow = {
 export default function ReportTable({
   dataByDay,
 }: {
-  dataByDay: GetReportData | null;
+  dataByDay: GetReportData;
 }) {
-  if (!dataByDay?.reports?.length) {
-    return (
-      <div className="py-10 text-center text-sm text-muted-foreground">
-        Нет данных
-      </div>
-    );
-  }
-
   const timeColumnsMap = new Map<number, string>();
 
-  for (const report of dataByDay.reports) {
+  for (const report of dataByDay?.reports) {
     if (!timeColumnsMap.has(report.timeMs)) {
       timeColumnsMap.set(report.timeMs, report.time);
     }
@@ -45,7 +37,7 @@ export default function ReportTable({
 
   const productsMap = new Map<string, ProductRow>();
 
-  for (const report of dataByDay.reports) {
+  for (const report of dataByDay?.reports) {
     const products = Object.values(report.data).flat();
 
     for (const product of products) {
